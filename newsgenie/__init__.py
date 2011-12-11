@@ -4,22 +4,21 @@
 import RssLib
 
 rss_urls = [
-#"http://wiadomosci.onet.pl/kraj/rss.xml", #polska
-#"http://wiadomosci.onet.pl/swiat/rss.xml", #swiat
-#"http://sport.onet.pl/wiadomosci/rss.xml", #sport
-#"http://wiadomosci.wp.pl/kat,1356,ver,rss,rss.xml", #świat
-##"http://wiadomosci.wp.pl/kat,1342,ver,rss,rss.xml", #polska
-#"http://wiadomosci.wp.pl/kat,8131,ver,rss,rss.xml", #prasa
-#"http://wiadomosci.wp.pl/kat,1355,ver,rss,rss.xml", #gospodarka
-#"http://www.wp.pl/rss.xml?id=2", #sport
-#"http://rss.gazeta.pl/pub/rss/wiadomosci_swiat.htm", #swiat
-#"http://rss.gazeta.pl/pub/rss/wiadomosci_kraj.htm", #kraj
+"http://wiadomosci.onet.pl/kraj/rss.xml", #polska
+"http://wiadomosci.onet.pl/swiat/rss.xml", #swiat
+"http://sport.onet.pl/wiadomosci/rss.xml", #sport
+"http://wiadomosci.wp.pl/kat,1356,ver,rss,rss.xml", #świat
+"http://wiadomosci.wp.pl/kat,1342,ver,rss,rss.xml", #polska
+"http://wiadomosci.wp.pl/kat,8131,ver,rss,rss.xml", #prasa
+"http://wiadomosci.wp.pl/kat,1355,ver,rss,rss.xml", #gospodarka
+"http://rss.gazeta.pl/pub/rss/wiadomosci_swiat.htm", #swiat
+"http://rss.gazeta.pl/pub/rss/wiadomosci_kraj.htm", #kraj
 "http://gazeta.pl.feedsportal.com/c/32739/f/612804/index.rss", #sport
-#"http://rss.feedsportal.com/c/32739/f/530278/index.rss", #gospodarka
-#"http://www.tvn24.pl/polska.xml", #polska
-#"http://www.tvn24.pl/swiat.xml", #swiat
-#"http://www.tvn24.pl/sport.xml", #sport
-#"http://www.tvn24.pl/biznes.xml", #gospodarka
+"http://rss.feedsportal.com/c/32739/f/530278/index.rss", #gospodarka
+"http://www.tvn24.pl/polska.xml", #polska
+"http://www.tvn24.pl/swiat.xml", #swiat
+"http://www.tvn24.pl/sport.xml", #sport
+"http://www.tvn24.pl/biznes.xml", #gospodarka
 ]
 
 from collections import namedtuple
@@ -30,7 +29,10 @@ news = []
 try:
     for url in rss_urls:
         rss = RssLib.RssLib(url).read()
-        news.extend(map(RssEntry._make, zip(rss["title"], rss["link"], rss["pubDate"])))
+        new_bunch = map(RssEntry._make, zip(rss["title"], rss["link"], rss["pubDate"]))
+        new_bunch = [e for e in new_bunch if e.title and e.link and e.date]
+        news.extend(new_bunch)
+        
 except RssLib.RssLibException as e:
     print e
 
