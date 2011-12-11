@@ -63,7 +63,7 @@ class GazetaParser(HTMLParser, IParser, object):
         try:
             self.feed(s)
         except Exception as e:
-            print "DUPA" + str(e)
+            print str(e)
         return " ".join(self._data)
 
 class TVN24Parser(HTMLParser, IParser, object):
@@ -214,25 +214,67 @@ class WPParser(IParser, HTMLParser, object):
             print e
         return " ".join(self._data)
 
+class RPParser(IParser, HTMLParser, object):
+    def __init__(self):
+        HTMLParser.__init__(self)
+        IParser.__init__(self)
+        self._inside_lead = False
+
+    def handle_starttag(self, tag, attributes):
+        if tag == "p":
+            if not self._inside_lead:
+                for key, value in attributes:
+                    if key == "class" and value == "lead":
+                        self._inside_lead = True  
+        elif tag == 'div':
+            for key, value in attributes:
+                if key == "class" and value == "clr":
+                    self._inside_lead = False
+
+    def handle_endtag(self, tag):
+        pass
+
+    def handle_data(self, s):
+        if self._inside_lead:
+            if s.strip():
+                self._data.append(s.strip())
+
+    def _parse(self, s):
+        self.reset()
+        self._data = []
+        try:
+            self.feed(s)
+        except Exception as e:
+            print e
+        ret = " ".join(self._data)
+        return ret
+
 class UnknownSourceException:
     pass
 
 class NewsParserFactory(object):
     def new(self,link):
-        if "gazeta.pl" in link or "feedsportal" in link:
-            return GazetaParser()
-        elif "wp.pl" in link:
+
+        if "wp.pl" in link:
             return WPParser()
         elif "onet.pl" in link:
             return OnetParser()
         elif "tvn24.pl" in link:
             return TVN24Parser()
+        elif "rp.pl" in link or "rp0Bpl" in link:
+            return RPParser()
+        if "gazeta" in link:
+            return GazetaParser()
         else:
             raise UnknownSourceException()
 
 if __name__=="__main__":
     from urllib2 import urlopen
-    urls = ["http://wiadomosci.gazeta.pl/wiadomosci/1,114881,10792683,Rottweilery_zagryzly_w_Czechach_swoja_wlascicielke.html?utm_source=RSS&utm_medium=RSS&utm_campaign=10199882",
+    
+    urls = ["http://rss.feedsportal.com/c/32536/f/482351/s/1ada66c2/l/0L0Srp0Bpl0Cartykul0C2324970H7683220Bhtml/story01.htm",
+"http://www.rp.pl/artykul/706292,768323.html",
+"http://www.rp.pl/artykul/69991,767665.html",
+"http://wiadomosci.gazeta.pl/wiadomosci/1,114881,10792683,Rottweilery_zagryzly_w_Czechach_swoja_wlascicielke.html?utm_source=RSS&utm_medium=RSS&utm_campaign=10199882",
 "http://www.tvn24.pl/12692,1727370,0,1,polacy-biedniejsi-niz-przed-rokiem,wiadomosc.html",
 "http://wiadomosci.onet.pl/kraj/represjonowani-w-stanie-wojennym-spotkali-sie-w-il,1,4963280,wiadomosc.html",
 "http://wiadomosci.gazeta.pl/wiadomosci/1,114881,10793499,W_redakcji__Nowej_Gaziety__nie_dzialaja_telefony_i.html?utm_source=RSS&utm_medium=RSS&utm_campaign=10199882",

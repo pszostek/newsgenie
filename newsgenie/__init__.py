@@ -2,23 +2,34 @@
 # -*- coding: utf-8 -*-
 
 import RssLib
-
-rss_urls = [
+#ONET
+"""
 "http://wiadomosci.onet.pl/kraj/rss.xml", #polska
 "http://wiadomosci.onet.pl/swiat/rss.xml", #swiat
 "http://sport.onet.pl/wiadomosci/rss.xml", #sport
+#WIRTUALNA POLSKA
 "http://wiadomosci.wp.pl/kat,1356,ver,rss,rss.xml", #świat
 "http://wiadomosci.wp.pl/kat,1342,ver,rss,rss.xml", #polska
 "http://wiadomosci.wp.pl/kat,8131,ver,rss,rss.xml", #prasa
 "http://wiadomosci.wp.pl/kat,1355,ver,rss,rss.xml", #gospodarka
+#GAZETA
 "http://rss.gazeta.pl/pub/rss/wiadomosci_swiat.htm", #swiat
 "http://rss.gazeta.pl/pub/rss/wiadomosci_kraj.htm", #kraj
 "http://gazeta.pl.feedsportal.com/c/32739/f/612804/index.rss", #sport
 "http://rss.feedsportal.com/c/32739/f/530278/index.rss", #gospodarka
+#TVN24
 "http://www.tvn24.pl/polska.xml", #polska
 "http://www.tvn24.pl/swiat.xml", #swiat
 "http://www.tvn24.pl/sport.xml", #sport
 "http://www.tvn24.pl/biznes.xml", #gospodarka
+#RZECZPOSPOLITA
+"""
+rss_urls = [
+"http://www.rp.pl/rss/2.html", #ogolne
+#"http://www.rp.pl/rss/10.html", #kraj
+#"http://www.rp.pl/rss/11.html", #swiat
+##"http://www.rp.pl/rss/12.html", #sport
+#"http://www.rp.pl/rss/5.html", #ekonomia
 ]
 
 from collections import namedtuple
@@ -32,7 +43,6 @@ try:
         new_bunch = map(RssEntry._make, zip(rss["title"], rss["link"], rss["pubDate"]))
         new_bunch = [e for e in new_bunch if e.title and e.link and e.date]
         news.extend(new_bunch)
-        
 except RssLib.RssLibException as e:
     print e
 
@@ -67,6 +77,8 @@ npf = NewsParserFactory()
 
 for rss_entry in news:
     from urllib2 import urlopen
+    print "___" + rss_entry.link
+    print ">>>"
     connection = urlopen(rss_entry.link)
     parser = npf.new(rss_entry.link)
     sanitizer = Sanitizer()
