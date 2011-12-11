@@ -171,12 +171,48 @@ class OnetParser(IParser, HTMLParser, object):
             print e
         return " ".join(self._data)
 
-class WPParser(IParser, object):
+class WPParser(IParser, HTMLParser, object):
     def __init__(self):
-        self.super.__init__()
+        HTMLParser.__init__(self)
+        IParser.__init__(self)
+        self._inside_intertext = False
+        self._inside_script = False
+        self._embedded_div = 0
 
-    def _parse(self):
-        pass
+    def handle_starttag(self, tag, attributes):
+        if self._inside_intertext and tag == "div":
+            self._embedded_div += 1
+        elif tag == "div":
+            for key, value in attributes:
+                if key == "id" and value == "intertext1":
+                    self._inside_intertext = True
+        elif tag == "script":
+            self._inside_script = True
+
+    def handle_endtag(self, tag):
+        if tag == "script":
+            self._inside_script = False
+        elif self._inside_intertext and tag == "div":
+            if self._embedded_div:
+                self._embedded_div -= 1
+            else:
+                self._inside_intertext = False
+
+    def handle_data(self, s):
+        if self._inside_script or self._embedded_div:
+            return
+        if self._inside_intertext:
+            if s.strip():
+                self._data.append(s.strip())
+
+    def _parse(self, s):
+        self.reset()
+        self._data = []
+        try:
+            self.feed(s)
+        except Exception as e:
+            print e
+        return " ".join(self._data)
 
 class UnknownSourceException:
     pass
