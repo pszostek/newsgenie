@@ -1,0 +1,580 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.2 r9819"
+   sodipodi:docname="schemat.svg">
+  <defs
+     id="defs4">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient10370">
+      <stop
+         style="stop-color:#e5e5e5;stop-opacity:1;"
+         offset="0"
+         id="stop10372" />
+      <stop
+         style="stop-color:#e5e5e5;stop-opacity:0;"
+         offset="1"
+         id="stop10374" />
+    </linearGradient>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Lend"
+       style="overflow:visible;">
+      <path
+         id="path3885"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         transform="scale(0.8) rotate(180) translate(12.5,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Mend"
+       style="overflow:visible;">
+      <path
+         id="path3891"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         transform="scale(0.4) rotate(180) translate(10,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Mstart"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Mstart"
+       style="overflow:visible">
+      <path
+         id="path3888"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none"
+         transform="scale(0.4) translate(10,0)" />
+    </marker>
+    <linearGradient
+       id="linearGradient3755">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop3757" />
+      <stop
+         style="stop-color:#a8ff41;stop-opacity:1;"
+         offset="1"
+         id="stop3759" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3755"
+       id="linearGradient3767"
+       x1="374.28693"
+       y1="76.07309"
+       x2="18.335709"
+       y2="261.94116"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-209.10157,-7.5994931)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3755-8"
+       id="linearGradient3767-6"
+       x1="374.28693"
+       y1="76.07309"
+       x2="18.335709"
+       y2="261.94116"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-11.111678,30.304576)" />
+    <linearGradient
+       id="linearGradient3755-8">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop3757-5" />
+      <stop
+         style="stop-color:#9141ff;stop-opacity:1;"
+         offset="1"
+         id="stop3759-3" />
+    </linearGradient>
+    <linearGradient
+       y2="261.94116"
+       x2="18.335709"
+       y1="76.07309"
+       x1="374.28693"
+       gradientTransform="translate(4.2039931,-7.599498)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient3784"
+       xlink:href="#linearGradient3755-8"
+       inkscape:collect="always" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3755-1"
+       id="linearGradient3767-8"
+       x1="374.28693"
+       y1="76.07309"
+       x2="18.335709"
+       y2="261.94116"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-11.111678,30.304576)" />
+    <linearGradient
+       id="linearGradient3755-1">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop3757-6" />
+      <stop
+         style="stop-color:#ffcf41;stop-opacity:1;"
+         offset="1"
+         id="stop3759-7" />
+    </linearGradient>
+    <linearGradient
+       y2="261.94116"
+       x2="18.335709"
+       y1="76.07309"
+       x1="374.28693"
+       gradientTransform="translate(416.34623,-6.5893359)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient3784-8"
+       xlink:href="#linearGradient3755-1"
+       inkscape:collect="always" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3755-13"
+       id="linearGradient3767-2"
+       x1="374.28693"
+       y1="76.07309"
+       x2="18.335709"
+       y2="261.94116"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-11.111678,30.304576)" />
+    <linearGradient
+       id="linearGradient3755-13">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop3757-8" />
+      <stop
+         style="stop-color:#ff41ba;stop-opacity:1;"
+         offset="1"
+         id="stop3759-9" />
+    </linearGradient>
+    <linearGradient
+       y2="261.94116"
+       x2="18.335709"
+       y1="76.07309"
+       x1="374.28693"
+       gradientTransform="translate(213.30554,-7.5995008)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient3784-3"
+       xlink:href="#linearGradient3755-13"
+       inkscape:collect="always" />
+    <marker
+       markerWidth="313.90625"
+       markerHeight="119.96875"
+       orient="auto"
+       id="marker7228">
+      <rect
+         ry="26.32089"
+         rx="26.32089"
+         y="-58.588844"
+         x="-43.436554"
+         height="75.761444"
+         width="199.00005"
+         id="rect7210"
+         style="fill:#000000;fill-opacity:0.78431373;fill-rule:nonzero;stroke:#a4a4a4;stroke-width:2.79999995;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:10" />
+      <rect
+         ry="26.32089"
+         rx="26.32089"
+         y="-11.111677"
+         x="-155.56349"
+         height="69.700523"
+         width="195.96959"
+         id="rect7208"
+         style="fill:#000000;fill-opacity:0.78431373;fill-rule:nonzero;stroke:#a4a4a4;stroke-width:2.79999995;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:10" />
+    </marker>
+    <linearGradient
+       y2="261.94116"
+       x2="18.335709"
+       y1="76.07309"
+       x1="374.28693"
+       gradientTransform="translate(416.34623,-6.5893359)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient3784-8-1"
+       xlink:href="#linearGradient3755-1-3"
+       inkscape:collect="always" />
+    <linearGradient
+       id="linearGradient3755-1-3">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop3757-6-7" />
+      <stop
+         style="stop-color:#41fdff;stop-opacity:1;"
+         offset="1"
+         id="stop3759-7-3" />
+    </linearGradient>
+    <linearGradient
+       y2="261.94116"
+       x2="18.335709"
+       y1="76.07309"
+       x1="374.28693"
+       gradientTransform="translate(625.44779,-7.5994812)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient8325"
+       xlink:href="#linearGradient3755-1-3"
+       inkscape:collect="always" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient10370"
+       id="linearGradient10376"
+       x1="-142.82511"
+       y1="268.48782"
+       x2="923.0051"
+       y2="268.48782"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="421.67992"
+     inkscape:cy="683.22697"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1680"
+     inkscape:window-height="973"
+     inkscape:window-x="0"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="fill:url(#linearGradient10376);fill-opacity:1;fill-rule:nonzero;stroke:#cbcbcb;stroke-width:2.79999995000000013;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:8.39999985999999943, 2.79999995000000013;stroke-dashoffset:0"
+       d="m -114.10232,40.19067 c -14.58177,0 -26.25461,11.730842 -26.3125,26.3125 l -1.01015,254.45067 c -0.0579,14.58166 17.79199,22.17133 32.37341,22.27189 151.778883,1.04673 360.38194,-12.81801 407.05472,6.06092 10.29382,4.1638 5.05077,121.18527 5.05077,121.18527 -0.11127,13.90539 -0.39093,26.40823 26.3125,26.3125 l 563.55681,-2.02031 c 14.58167,-0.0523 28.3328,-8.70027 28.3328,-225.26641 0,-216.56615 3.42156,-229.30703 -11.16021,-229.30703 z"
+       id="rect7245"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="sssssssscss"
+       inkscape:export-filename="/home/pawel/elka/wedt/projekt/struktura.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="opacity:0.88253012;fill:url(#linearGradient3784);fill-opacity:1;stroke:#b681ff;stroke-width:5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       id="rect2985-4"
+       width="181.50072"
+       height="112.17361"
+       x="91.077095"
+       y="100.27007"
+       rx="26.32089"
+       ry="26.32089"
+       inkscape:export-filename="/home/pawel/elka/wedt/projekt/struktura.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="opacity:0.88253012;fill:url(#linearGradient3784-3);fill-opacity:1;stroke:#ff80d1;stroke-width:5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       id="rect2985-5"
+       width="181.50072"
+       height="112.17361"
+       x="300.17868"
+       y="100.27007"
+       rx="26.32089"
+       ry="26.32089"
+       inkscape:export-filename="/home/pawel/elka/wedt/projekt/struktura.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="star"
+       style="opacity:0.88253012;fill:#9b9aff;fill-opacity:1;fill-rule:nonzero;stroke:#8f81ff;stroke-width:5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       id="path3837"
+       sodipodi:sides="5"
+       sodipodi:cx="477.80215"
+       sodipodi:cy="333.13358"
+       sodipodi:r1="70.71067"
+       sodipodi:r2="130.01176"
+       sodipodi:arg1="0.92729521"
+       sodipodi:arg2="1.5556138"
+       inkscape:flatsided="true"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 520.22856,389.70211 -83.1158,1.26201 -26.88444,-78.65784 66.5003,-49.87523 67.98389,47.83326 z"
+       inkscape:transform-center-x="-1.0135638"
+       inkscape:transform-center-y="-11.447112"
+       transform="translate(18.182746,54.548236)"
+       inkscape:export-filename="/home/pawel/elka/wedt/projekt/struktura.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="star"
+       style="opacity:0.88253012;fill:#ff9a9a;fill-opacity:1;fill-rule:nonzero;stroke:#ff8181;stroke-width:5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       id="path3837-5"
+       sodipodi:sides="5"
+       sodipodi:cx="477.80215"
+       sodipodi:cy="333.13358"
+       sodipodi:r1="62.474487"
+       sodipodi:r2="130.01176"
+       sodipodi:arg1="-0.94348825"
+       sodipodi:arg2="-0.31516965"
+       inkscape:flatsided="true"
+       inkscape:rounded="1.4055996"
+       inkscape:randomized="0"
+       d="m 514.47265,282.55357 c 83.57745,60.59364 54.56687,-28.38571 22.76575,69.82564 -31.80112,98.21134 43.85851,43.12451 -59.37312,43.22882 -103.23163,0.10431 -27.46082,55.03813 -59.46036,-43.10875 -31.99953,-98.14688 -60.83023,-9.10908 22.6246,-69.8715 83.45483,-60.76241 -10.13433,-60.66785 73.44313,-0.0742 z"
+       inkscape:transform-center-x="-1.0135638"
+       inkscape:transform-center-y="-11.447112"
+       transform="translate(-306.75464,113.51215)"
+       inkscape:export-filename="/home/pawel/elka/wedt/projekt/struktura.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;stroke:#a4a4a4;stroke-width:2.79999995;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:10;marker-start:none;marker-end:none"
+       d="M -31.314729,208.88481 C -36.233735,344.74788 322.76486,282.44973 439.41636,355.35692"
+       id="path3877"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="/home/pawel/elka/wedt/projekt/struktura.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="opacity:0.88253012;fill:url(#linearGradient3767);fill-opacity:1;stroke:#c5ff81;stroke-width:5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       id="rect2985"
+       width="181.50072"
+       height="112.17361"
+       x="-122.22846"
+       y="100.27007"
+       rx="26.32089"
+       ry="26.32089"
+       inkscape:export-filename="/home/pawel/elka/wedt/projekt/struktura.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;stroke:#a4a4a4;stroke-width:2.79999995;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:10;marker-start:none;marker-end:none"
+       d="m 173.74624,215.95588 c -2.37628,75.90281 190.91882,37.33278 294.96454,118.18785"
+       id="path4511"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="/home/pawel/elka/wedt/projekt/struktura.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;stroke:#a4a4a4;stroke-width:2.79999995;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:10;marker-start:none;marker-mid:none;marker-end:none"
+       d="m 601.04076,213.93557 c -2.42617,111.8518 2.93281,98.13139 -68.69037,126.26907"
+       id="path4515"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="/home/pawel/elka/wedt/projekt/struktura.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="opacity:0.88253012;fill:url(#linearGradient3784-8);fill-opacity:1;stroke:#ffe081;stroke-width:5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       id="rect2985-8"
+       width="181.50072"
+       height="112.17361"
+       x="503.21936"
+       y="101.28021"
+       rx="26.32089"
+       ry="26.32089"
+       inkscape:export-filename="/home/pawel/elka/wedt/projekt/struktura.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;stroke:#a4a4a4;stroke-width:2.79999995;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:10;marker-start:none;marker-end:none"
+       d="m 399.01025,214.94572 c 2.41998,55.3656 133.83404,63.72029 115.1574,114.14724"
+       id="path4517"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="/home/pawel/elka/wedt/projekt/struktura.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot7129"
+       style="font-size:16px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#caff8c;fill-opacity:0.40120395;stroke:none;font-family:Sans"
+       transform="translate(-86.364822,-6.153312)"
+       inkscape:export-filename="/home/pawel/elka/wedt/projekt/struktura.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><flowRegion
+         id="flowRegion7131"><rect
+           id="rect7133"
+           width="154.55334"
+           height="87.88327"
+           x="-23.233509"
+           y="125.04214"
+           style="font-size:16px;text-align:center;text-anchor:middle;fill:#caff8c;fill-opacity:0.40120395" /></flowRegion><flowPara
+         id="flowPara7135"
+         style="font-size:20px;font-weight:bold;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:0.6525974;-inkscape-font-specification:Sans Bold">Moduł pobierania newsów</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot7129-2"
+       style="font-size:16px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#caff8c;fill-opacity:0.40120395;stroke:none;font-family:Sans"
+       transform="translate(114.31573,-6.153312)"
+       inkscape:export-filename="/home/pawel/elka/wedt/projekt/struktura.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><flowRegion
+         id="flowRegion7131-7"><rect
+           id="rect7133-7"
+           width="179.80716"
+           height="102.02541"
+           x="-23.233509"
+           y="125.04214"
+           style="font-size:16px;text-align:center;text-anchor:middle;fill:#caff8c;fill-opacity:0.40120395" /></flowRegion><flowPara
+         id="flowPara7135-7"
+         style="font-size:20px;font-weight:bold;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:0.6525974;-inkscape-font-specification:Sans Bold">Moduł preprocessingu tekstu</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot7129-4"
+       style="font-size:16px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#caff8c;fill-opacity:0.40120395;stroke:none;font-family:Sans"
+       transform="translate(337.22884,4.3300864)"
+       inkscape:export-filename="/home/pawel/elka/wedt/projekt/struktura.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><flowRegion
+         id="flowRegion7131-3"><rect
+           id="rect7133-4"
+           width="154.55334"
+           height="87.88327"
+           x="-23.233509"
+           y="125.04214"
+           style="font-size:16px;text-align:center;text-anchor:middle;fill:#caff8c;fill-opacity:0.40120395" /></flowRegion><flowPara
+         id="flowPara7135-6"
+         style="font-size:20px;font-weight:bold;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:0.6525974;-inkscape-font-specification:Sans Bold">Moduł grupowania</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot7129-1"
+       style="font-size:16px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#caff8c;fill-opacity:0.40120395;stroke:none;font-family:Sans"
+       transform="translate(533.93062,-7.159761)"
+       inkscape:export-filename="/home/pawel/elka/wedt/projekt/struktura.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><flowRegion
+         id="flowRegion7131-2"><rect
+           id="rect7133-8"
+           width="165.66502"
+           height="89.903572"
+           x="-23.233509"
+           y="125.04214"
+           style="font-size:16px;text-align:center;text-anchor:middle;fill:#caff8c;fill-opacity:0.40120395" /></flowRegion><flowPara
+         id="flowPara7135-4"
+         style="font-size:20px;font-weight:bold;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:0.6525974;-inkscape-font-specification:Sans Bold">Moduł etykietowania grup</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot7190"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:0.65098039;stroke:none;font-family:Sans"
+       transform="translate(-10.598791,-5.4635734)"
+       inkscape:export-filename="/home/pawel/elka/wedt/projekt/struktura.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><flowRegion
+         id="flowRegion7192"><rect
+           id="rect7194"
+           width="100.0051"
+           height="81.822357"
+           x="456.58896"
+           y="359.39752"
+           style="fill:#000000;fill-opacity:0.65098039" /></flowRegion><flowPara
+         id="flowPara7196"
+         style="font-size:20px;font-weight:bold;fill:#000000;fill-opacity:0.65098039;-inkscape-font-specification:Sans Bold"><flowSpan
+   style="font-weight:bold;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:0.65098039;-inkscape-font-specification:Sans Bold"
+   id="flowSpan7206">Baza</flowSpan> danych</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot7198"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:0.65098039;stroke:none;font-family:Sans"
+       transform="translate(-3.2273918,48.349067)"
+       inkscape:export-filename="/home/pawel/elka/wedt/projekt/struktura.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><flowRegion
+         id="flowRegion7200"><rect
+           id="rect7202"
+           width="227.28433"
+           height="158.59395"
+           x="122.22845"
+           y="376.57013"
+           style="fill:#000000;fill-opacity:0.65098039" /></flowRegion><flowPara
+         id="flowPara7204"
+         style="font-size:20px;font-weight:bold;fill:#000000;fill-opacity:0.65098039;-inkscape-font-specification:Sans Bold">Stemmer</flowPara></flowRoot>    <path
+       style="fill:none;stroke:#a4a4a4;stroke-width:2.79999995;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 173.74623,214.94572 c 1.79418,83.95651 93.83504,141.73366 34.34519,179.80716"
+       id="path7250"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="/home/pawel/elka/wedt/projekt/struktura.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot7252"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       transform="translate(-11.111678,9.0913729)"
+       inkscape:export-filename="/home/pawel/elka/wedt/projekt/struktura.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><flowRegion
+         id="flowRegion7254"><rect
+           id="rect7256"
+           width="210.11172"
+           height="135.36044"
+           x="689.9342"
+           y="376.57013" /></flowRegion><flowPara
+         id="flowPara7258"
+         style="font-size:25px;font-weight:bold;-inkscape-font-specification:Sans Bold">Tworzona aplikacja</flowPara></flowRoot>    <path
+       style="fill:none;stroke:#a4a4a4;stroke-width:2.79999995;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:10;marker-start:none;marker-mid:none;marker-end:none"
+       d="M 808.12204,207.87466 C 805.69587,319.72646 635.2883,334.29032 563.66512,362.428"
+       id="path4515-6"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="/home/pawel/elka/wedt/projekt/struktura.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="opacity:0.88253011999999986;fill:url(#linearGradient8325);fill-opacity:1;stroke:#81e4ff;stroke-width:5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       id="rect2985-8-3"
+       width="181.50072"
+       height="112.17361"
+       x="712.32092"
+       y="100.27007"
+       rx="26.32089"
+       ry="26.32089"
+       inkscape:export-filename="/home/pawel/elka/wedt/projekt/struktura.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot7129-1-9"
+       style="font-size:16px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#caff8c;fill-opacity:0.40120395;stroke:none;font-family:Sans"
+       transform="translate(743.03218,-8.1699012)"
+       inkscape:export-filename="/home/pawel/elka/wedt/projekt/struktura.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><flowRegion
+         id="flowRegion7131-2-4"><rect
+           id="rect7133-8-0"
+           width="165.66502"
+           height="89.903572"
+           x="-23.233509"
+           y="125.04214"
+           style="font-size:16px;text-align:center;text-anchor:middle;fill:#caff8c;fill-opacity:0.40120395" /></flowRegion><flowPara
+         id="flowPara7135-4-8"
+         style="font-size:20px;font-weight:bold;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:0.6525974;-inkscape-font-specification:Sans Bold">Moduł generacji strony</flowPara></flowRoot>  </g>
+</svg>
