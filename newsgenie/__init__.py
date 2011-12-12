@@ -2,8 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import RssLib
+
+
+rss_urls = [
 #ONET
-"""
 "http://wiadomosci.onet.pl/kraj/rss.xml", #polska
 "http://wiadomosci.onet.pl/swiat/rss.xml", #swiat
 "http://sport.onet.pl/wiadomosci/rss.xml", #sport
@@ -23,13 +25,11 @@ import RssLib
 "http://www.tvn24.pl/sport.xml", #sport
 "http://www.tvn24.pl/biznes.xml", #gospodarka
 #RZECZPOSPOLITA
-"""
-rss_urls = [
 "http://www.rp.pl/rss/2.html", #ogolne
-#"http://www.rp.pl/rss/10.html", #kraj
-#"http://www.rp.pl/rss/11.html", #swiat
-##"http://www.rp.pl/rss/12.html", #sport
-#"http://www.rp.pl/rss/5.html", #ekonomia
+"http://www.rp.pl/rss/10.html", #kraj
+"http://www.rp.pl/rss/11.html", #swiat
+"http://www.rp.pl/rss/12.html", #sport
+"http://www.rp.pl/rss/5.html" #ekonomia
 ]
 
 from collections import namedtuple
@@ -77,8 +77,6 @@ npf = NewsParserFactory()
 
 for rss_entry in news:
     from urllib2 import urlopen
-    print "___" + rss_entry.link
-    print ">>>"
     connection = urlopen(rss_entry.link)
     parser = npf.new(rss_entry.link)
     sanitizer = Sanitizer()

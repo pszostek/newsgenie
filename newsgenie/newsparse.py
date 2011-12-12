@@ -26,15 +26,24 @@ class GazetaParser(HTMLParser, IParser, object):
         self._embedded_span = 0
 
     def handle_starttag(self, tag, attributes):
-        if self._inside_article:
+        if self._inside_article_lead:
             if tag == "div":
+                print "DUPA1"
+                print attributes
+                for key, value in attributes:
+                    if key == "id" and value == "artykul":
+                        self._inside_article_lead = False
+                        self._inside_article = True
+                        self._embedded_div = 0
+                        print "DUPA"
+                        return
                 self._embedded_div += 1
             elif tag == "span":
                 self._embedded_span += 1
             return
-        if tag == 'div':
+        elif tag == 'div':
             for key, value in attributes:
-                if key == 'id' and (value == "gazeta_article_lead" or value == "art"):
+                if key == 'id' and (value == "gazeta_article_lead"):
                     self._inside_article_lead = True
                 elif key == 'id' and (value == "artykul" or value == "artykul_live"):
                     self._inside_article = True
@@ -270,8 +279,9 @@ class NewsParserFactory(object):
 
 if __name__=="__main__":
     from urllib2 import urlopen
-    
-    urls = ["http://rss.feedsportal.com/c/32536/f/482351/s/1ada66c2/l/0L0Srp0Bpl0Cartykul0C2324970H7683220Bhtml/story01.htm",
+    import sanitizer
+    urls = ["http://gazeta.pl.feedsportal.com/c/32739/f/612804/s/1ada18a6/l/0L0Ssport0Bpl0Csport0C10H650A250H10A7987750HPlywanie0I0IMistrzostwa0IEuropy0Iw0ISzczecinie0Ina0I250Imetrowym0Bhtml/story01.htm",
+"http://rss.feedsportal.com/c/32536/f/482351/s/1ada66c2/l/0L0Srp0Bpl0Cartykul0C2324970H7683220Bhtml/story01.htm",
 "http://www.rp.pl/artykul/706292,768323.html",
 "http://www.rp.pl/artykul/69991,767665.html",
 "http://wiadomosci.gazeta.pl/wiadomosci/1,114881,10792683,Rottweilery_zagryzly_w_Czechach_swoja_wlascicielke.html?utm_source=RSS&utm_medium=RSS&utm_campaign=10199882",
@@ -280,10 +290,12 @@ if __name__=="__main__":
 "http://wiadomosci.gazeta.pl/wiadomosci/1,114881,10793499,W_redakcji__Nowej_Gaziety__nie_dzialaja_telefony_i.html?utm_source=RSS&utm_medium=RSS&utm_campaign=10199882",
 "http://www.tvn24.pl/12692,1727379,0,1,pakt-fiskalny-przelamie-kryzys-damy-rade,wiadomosc.html"]
     npf = NewsParserFactory()
+    sanitizer = sanitizer.Sanitizer()
     for url in urls:
         connection = urlopen(url)
         parser = npf.new(url)
         encoding = connection.headers.getparam('charset')
         content = connection.read().decode(encoding)
+        content = sanitizer.remove_js(content)
         print("\n\n" + url + "\n" + parser.parse(content))
     
