@@ -36,16 +36,6 @@ from collections import namedtuple
 RssEntry = namedtuple('RssEntry', ['title','link','date'], verbose=False)
 
 news = []
-
-try:
-    for url in rss_urls:
-        rss = RssLib.RssLib(url).read()
-        new_bunch = map(RssEntry._make, zip(rss["title"], rss["link"], rss["pubDate"]))
-        new_bunch = [e for e in new_bunch if e.title and e.link and e.date]
-        news.extend(new_bunch)
-except RssLib.RssLibException as e:
-    print e
-
 import time, datetime
 
 def convert_to_timestamp(rss_date):
@@ -68,6 +58,18 @@ def convert_to_timestamp(rss_date):
     ts = time.mktime(time.strptime(rss_date, tf))
     ts = int(ts) + offset
     return ts 
+
+try:
+    for url in rss_urls:
+        rss = RssLib.RssLib(url).read()
+		rss_date = convert_to_timestamp(rss["pubDate"])
+        new_bunch = map(RssEntry._make, zip(rss["title"], rss["link"], rss_date))
+        new_bunch = [e for e in new_bunch if e.title and e.link and e.date]
+        news.extend(new_bunch)
+except RssLib.RssLibException as e:
+    print e
+
+
     
 #for re in news:
 #    print re.title, re.link, str(convert_to_timestamp(re.date))
