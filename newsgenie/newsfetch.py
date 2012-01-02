@@ -36,33 +36,14 @@ from collections import namedtuple
 RssEntry = namedtuple('RssEntry', ['title','link','date'], verbose=False)
 
 news = []
-import time, datetime
-
-def convert_to_timestamp(rss_date):
-    def calculate_offset(rss_date):
-        if "GMT" in rss_date:
-            rss_date = rss_date.rstrip("GMT")
-            rss_date = rss_date.strip()
-            return (rss_date,0)
-        else:
-            offset = rss_date[-5:]
-            rss_date = rss_date[:-5]
-            rss_date = rss_date.strip()
-            if offset[0] == "-":
-                return (rss_date,-3600*int(offset[1]))
-            else:
-                return (rss_date,3600*int(offset[1]))
-
-    rss_date, offset = calculate_offset(rss_date)
-    tf = "%a, %d %b %Y %H:%M:%S"
-    ts = time.mktime(time.strptime(rss_date, tf))
-    ts = int(ts) + offset
-    return ts 
+from sanitizer import Sanitizer
+sanitizer = Sanitizer()
 
 try:
     for url in rss_urls:
+        print url
         rss = RssLib.RssLib(url).read()
-		rss_date = convert_to_timestamp(rss["pubDate"])
+        rss_date = [sanitizer.convert_to_timestamp(d) for d in rss["pubDate"]]
         new_bunch = map(RssEntry._make, zip(rss["title"], rss["link"], rss_date))
         new_bunch = [e for e in new_bunch if e.title and e.link and e.date]
         news.extend(new_bunch)
@@ -74,14 +55,12 @@ except RssLib.RssLibException as e:
 #for re in news:
 #    print re.title, re.link, str(convert_to_timestamp(re.date))
 from newsparse import NewsParserFactory 
-from sanitizer import Sanitizer
 npf = NewsParserFactory()
 
 for rss_entry in news:
     from urllib2 import urlopen
     connection = urlopen(rss_entry.link)
     parser = npf.new(rss_entry.link)
-    sanitizer = Sanitizer()
     encoding = connection.headers.getparam('charset')
     content = connection.read().decode(encoding)
     content = sanitizer.remove_js(content)
