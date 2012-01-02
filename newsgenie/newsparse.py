@@ -258,15 +258,16 @@ class RPParser(IParser, HTMLParser, object):
         ret = " ".join(self._data)
         return ret
 
-class UnknownSourceException:
-    pass
+class UnknownSourceException(RuntimeError):
+    def __init__(self, arg):
+        super(UnknownSourceException, self).__init__(arg)
 
 class NewsParserFactory(object):
     def new(self,link):
 
         if "wp.pl" in link:
             return WPParser()
-        elif "onet.pl" in link:
+        elif "onet.pl" in link or "onet0Bpl" in link:
             return OnetParser()
         elif "tvn24.pl" in link:
             return TVN24Parser()
@@ -275,7 +276,7 @@ class NewsParserFactory(object):
         if "gazeta" in link:
             return GazetaParser()
         else:
-            raise UnknownSourceException()
+            raise UnknownSourceException(link)
 
 if __name__=="__main__":
     from urllib2 import urlopen
