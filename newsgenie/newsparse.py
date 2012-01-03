@@ -271,7 +271,7 @@ class NewsParserFactory(object):
             return OnetParser()
         elif "tvn24.pl" in link:
             return TVN24Parser()
-        elif "rp.pl" in link or "rp0Bpl" in link:
+        elif "rp.pl" in link or "rp0Bpl" in link or "ekonomia240Bpl" in link:
             return RPParser()
         if "gazeta" in link:
             return GazetaParser()
