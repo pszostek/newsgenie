@@ -72,6 +72,7 @@ class GazetaParser(HTMLParser, IParser, object):
         try:
             self.feed(s)
         except Exception as e:
+            #LOG HERE
             print str(e)
         return " ".join(self._data)
 

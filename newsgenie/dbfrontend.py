@@ -89,7 +89,9 @@ class DBProxy(object):
         self._db.session.commit()
 
     def add_list_of_news_if_not_duped(self, news):
-        news = list(set(self._news).difference_update())
+        self_news_set = set(self._news)
+        new_news_set = set(news)
+        news = list(set(new_news_set.difference_update(self_news_set))
         return self.add_list_of_news(news)
 
     def dump_news(self):
