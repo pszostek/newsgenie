@@ -33,6 +33,7 @@ def fetch_news(rss_entry):
         clean_body = ""
         news = News(title=rss_entry.title, body=content, clean_body=clean_body, url=rss_entry.url, date=rss_entry.date)
     except Exception, e:
+        #LOG HERE
         print e
     return news
 
@@ -70,6 +71,7 @@ class NewsFetcher(object):
         pass
 
     def fetch_rss_entries(self):
+        """ Fetch rss by running multiple instances of fetch_entry function """
         pool = Pool(processes=10)
         rss_entries = pool.map(fetch_entry, NewsFetcher.rss_urls)
         rss_entries = [item for sublist in rss_entries for item in sublist ]
@@ -77,21 +79,21 @@ class NewsFetcher(object):
         return rss_entries
 
     def fetch_and_parse_news(self, rss_entries):
-        from dbfrontend import News
-        from urllib2 import urlopen
-        import sanitizer
+        """ Fetch news in a parallel way """
         from multiprocessing import Pool
-        pool = Pool(processes=10)
 
+        pool = Pool(processes=5)
         news = pool.map(fetch_news, rss_entries)
+        print len(news)
         return news
 
+    def run(self):
+        from dbfrontend import DBProxy
+        rss_entries = self.fetch_rss_entries()
+        news = self.fetch_and_parse_news(rss_entries)
+        db = DBProxy()
+        db.add_list_of_news_if_not_duped(news)
+
 if __name__ == "__main__":
-    from dbfrontend import DBProxy
-    nf = NewsFetcher()
-    rss_entries = nf.fetch_rss_entries()
-    news = nf.fetch_and_parse_news(rss_entries)
-    db = DBProxy()
-    db.add_list_of_news_if_not_duped(news)
-    #print("\n\n" + unicode(rss_entry.link) + "\n" + unicode(body))
-        
+    news_fetcher = NewsFetcher()
+    news_fetcher.run()
