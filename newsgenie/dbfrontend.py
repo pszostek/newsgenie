@@ -50,7 +50,7 @@ class DBProxy(object):
 
     def get_sorted_news(self, field):
         return sorted(self._news, key=lambda n: n.__getattribute__(field))
-    
+
     def count_news(self):
         """ return number of all news """
         return len(self._news)

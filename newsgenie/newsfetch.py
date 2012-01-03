@@ -2,11 +2,39 @@
 # -*- coding: utf-8 -*-
 
 import RssLib
-
-
-
-
 from collections import namedtuple
+from multiprocessing import Pool
+
+def fetch_entry(url):
+    import sanitizer
+    sanitizer = sanitizer.Sanitizer()
+    rss = RssLib.RssLib(url).read()
+    rss_date = [sanitizer.convert_to_timestamp(d) for d in rss["pubDate"]]
+    new_rss_entries = map(RssEntry._make, zip(rss["title"], rss["link"], rss_date))
+    new_rss_entries = [e for e in new_rss_entries if e.title and e.url and e.date]
+    return new_rss_entries
+
+def fetch_news(rss_entry):
+    import sanitizer
+    from dbfrontend import News
+    from urllib2 import urlopen
+    from newsparse import NewsParserFactory
+    sanitizer = sanitizer.Sanitizer()
+    npf = NewsParserFactory()
+
+    news = []
+    try:
+        connection = urlopen(rss_entry.url)
+        parser = npf.new(rss_entry.url)
+        encoding = connection.headers.getparam('charset')
+        content = connection.read().decode(encoding)
+        content = sanitizer.remove_js(content)
+        body = parser.parse(content)
+        clean_body = ""
+        news = News(title=rss_entry.title, body=content, clean_body=clean_body, url=rss_entry.url, date=rss_entry.date)
+    except Exception, e:
+        print e
+    return news
 
 RssEntry = namedtuple('RssEntry', ['title','url','date'], verbose=False)
 class NewsFetcher(object):
@@ -37,53 +65,32 @@ class NewsFetcher(object):
     "http://www.rp.pl/rss/12.html", #sport
     "http://www.rp.pl/rss/5.html" #ekonomia
     ]
-    def __init__(self):
-        import sanitizer
-        self._sanitizer = sanitizer.Sanitizer()
-        
-    def fetch_rss_entries(self):
-        rss_entries = []
 
-        try:
-            for url in NewsFetcher.rss_urls:
-                print url
-                rss = RssLib.RssLib(url).read()
-                rss_date = [self._sanitizer.convert_to_timestamp(d) for d in rss["pubDate"]]
-                new_rss_entries = map(RssEntry._make, zip(rss["title"], rss["link"], rss_date))
-                new_rss_entries = [e for e in new_rss_entries if e.title and e.url and e.date]
-                rss_entries.extend(new_rss_entries)
-        except RssLib.RssLibException as e:
-            print e
+    def __init__(self):
+        pass
+
+    def fetch_rss_entries(self):
+        pool = Pool(processes=10)
+        rss_entries = pool.map(fetch_entry, NewsFetcher.rss_urls)
+        rss_entries = [item for sublist in rss_entries for item in sublist ]
+        print len(rss_entries)
         return rss_entries
 
-    def fetch_news(self, rss_entries):
-        from newsparse import NewsParserFactory
+    def fetch_and_parse_news(self, rss_entries):
         from dbfrontend import News
-            from urllib2 import urlopen
-        npf = NewsParserFactory()
+        from urllib2 import urlopen
+        import sanitizer
+        from multiprocessing import Pool
+        pool = Pool(processes=10)
 
-        news = []
-        for rss_entry in rss_entries:
-            try:
-                connection = urlopen(rss_entry.url)
-                parser = npf.new(rss_entry.url)
-                encoding = connection.headers.getparam('charset')
-                content = connection.read().decode(encoding)
-                content = self._sanitizer.remove_js(content)
-                #content = sanitizer.remove_blanks(content)
-                body = parser.parse(content)
-                #clean_body = stemmer.stem(body)
-                clean_body = content
-                news.append(News(title=rss_entry.title, body=content, clean_body=clean_body, url=rss_entry.url, date=rss_entry.date))
-            except e:
-                print e
+        news = pool.map(fetch_news, rss_entries)
         return news
 
 if __name__ == "__main__":
     from dbfrontend import DBProxy
     nf = NewsFetcher()
     rss_entries = nf.fetch_rss_entries()
-    news = nf.fetch_news(rss_entries)
+    news = nf.fetch_and_parse_news(rss_entries)
     db = DBProxy()
     db.add_list_of_news_if_not_duped(news)
     #print("\n\n" + unicode(rss_entry.link) + "\n" + unicode(body))
