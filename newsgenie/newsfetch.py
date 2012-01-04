@@ -8,10 +8,15 @@ from multiprocessing import Pool
 def fetch_entry(url):
     import sanitizer
     sanitizer = sanitizer.Sanitizer()
-    rss = RssLib.RssLib(url).read()
-    rss_date = [sanitizer.convert_to_timestamp(d) for d in rss["pubDate"]]
-    new_rss_entries = map(RssEntry._make, zip(rss["title"], rss["link"], rss_date))
-    new_rss_entries = [e for e in new_rss_entries if e.title and e.url and e.date]
+    try:
+        rss = RssLib.RssLib(url).read()
+        rss_date = [sanitizer.convert_to_timestamp(d) for d in rss["pubDate"]]
+        new_rss_entries = map(RssEntry._make, zip(rss["title"], rss["link"], rss_date))
+        new_rss_entries = [e for e in new_rss_entries if e.title and e.url and e.date]
+    except Exception, e:
+        #LOG HERE
+        print e
+        return None
     return new_rss_entries
 
 def fetch_news(rss_entry):
@@ -29,15 +34,17 @@ def fetch_news(rss_entry):
         encoding = connection.headers.getparam('charset')
         content = connection.read().decode(encoding)
         content = sanitizer.remove_js(content)
-        body = parser.parse(content)
+        content = parser.parse(content)
         clean_body = ""
         news = News(title=rss_entry.title, body=content, clean_body=clean_body, url=rss_entry.url, date=rss_entry.date)
     except Exception, e:
         #LOG HERE
         print e
+        return None
     return news
 
 RssEntry = namedtuple('RssEntry', ['title','url','date'], verbose=False)
+
 class NewsFetcher(object):
     rss_urls = [
     #ONET
@@ -74,7 +81,7 @@ class NewsFetcher(object):
         """ Fetch rss by running multiple instances of fetch_entry function """
         pool = Pool(processes=10)
         rss_entries = pool.map(fetch_entry, NewsFetcher.rss_urls)
-        rss_entries = [item for sublist in rss_entries for item in sublist ]
+        rss_entries = [item for sublist in rss_entries for item in sublist if item ]
         print len(rss_entries)
         return rss_entries
 
@@ -91,6 +98,10 @@ class NewsFetcher(object):
         from dbfrontend import DBProxy
         rss_entries = self.fetch_rss_entries()
         news = self.fetch_and_parse_news(rss_entries)
+        for n in news:
+            print n.title
+            print n.body[0:100]
+            print ""
         db = DBProxy()
         db.add_list_of_news_if_not_duped(news)
 
