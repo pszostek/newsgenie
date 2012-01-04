@@ -27,6 +27,9 @@ class News(object):
     def __eq__(self, other):
         return self.url == other.url
 
+    def __hash__(self):
+        return hash(self.url)
+
 class DBProxy(object):
     """ Proxy for accessing SQLite DB """
     def __init__(self):
@@ -90,14 +93,14 @@ class DBProxy(object):
 
     def add_list_of_news_if_not_duped(self, news):
         self_news_set = set(self._news)
-        new_news_set = set(news)
-        news = list(set(new_news_set.difference_update(self_news_set))
+        new_news_set = set([n for n in news if n])
+        news = list(new_news_set.difference_update(self_news_set))
         return self.add_list_of_news(news)
 
     def dump_news(self):
         """ return all news in the database as a string """
         news = self.get_all_news()
-        return '\n'.join(unicode(news))
+        return '\n'.join([unicode(n) for n in news])
 
 if __name__ == "__main__":
     db = DBProxy()
