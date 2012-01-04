@@ -58,6 +58,7 @@ class NewsGroup(object):
         result = {}
         g1_len = len(g1.news)
         g2_len = len(g2.news)
+        ##calculate the new center as a weigthed mean value of both centers
         for word in g1.center.keys():
             result[word] = g1_len*g1.center[word]
         for word in g2.center.keys():
@@ -68,7 +69,9 @@ class NewsGroup(object):
         result_len = g1_len + g2_len
         for word in result:
             result[word] /= result_len
-        ret = Group(center = result, news = g1.news + g2.news)
+        #new group consists of news taken from both groups
+        new_group_news = g1.news + g2.news
+        ret = Group(center = result, new_group_news)
         return ret
     
     def group(self, list_of_vectors, threshold, distance_function):
