@@ -58,27 +58,31 @@ class DBProxy(object):
         """ return number of all news """
         return len(self._news)
 
+    def delete_all_news(self):
+        """ delete all news from the db """
+        ret = len(self._news)
+        for n in self._news:
+            self._db.session.delete(n)
+        self._news = []
+        self._db.session.commit()
+        return ret
+
     def delete_old_news(self, seconds):
         """remove all news from the database issued later than seconds ago"""
         import time
         cur_time = int(time.time())
         
         items_removed = 0
+        new_list = []
         for n in self._news:
             if n.date + seconds < cur_time:
                 self._db.session.delete(n)
-                self._db.session.commit()
-                self._news.remove(n)
                 items_removed += 1
+            else:
+                new_list.append(n)
+        self._db.session.commit()
+        self._news = new_list
         return items_removed
-
-    def add_news_if_not_duped(self, news):
-        """ add and commit a news to the DB if is not duplicated """
-        for saved_news in self._news:
-            if saved_news == news:
-                return False
-        self.add_news(news)
-        return True
 
     def add_news(self, news):
         """ add and commit a news to the databse """
@@ -90,12 +94,6 @@ class DBProxy(object):
         for n in news:
             self._db.session.add(n)
         self._db.session.commit()
-
-    def add_list_of_news_if_not_duped(self, news):
-        self_news_set = set(self._news)
-        new_news_set = set([n for n in news if n])
-        news = list(new_news_set.difference_update(self_news_set))
-        return self.add_list_of_news(news)
 
     def dump_news(self):
         """ return all news in the database as a string """
