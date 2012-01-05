@@ -52,7 +52,20 @@ class NewsGroup(object):
         return float(v1_and_v2)/float(v1_or_v2)
 
     def _recalculate_group_after_add(self, group, vector):
-        pass
+        result = {}
+        for word in group.center.keys():
+            result[word] = len(group.news)*group.center[word]
+        if word in result:
+            result[word] += vector[word]
+        else:
+            result[word] = vector[word]
+
+        for word in result:
+            result[word] /= len(group.news) + 1
+
+        #group's will be change externaly
+        group.center = result
+        #no return
 
     def _merge_groups(self, g1, g2):
         result = {}
@@ -107,6 +120,7 @@ class NewsGroup(object):
                 g = Group(news=list(elem), center=elem)
                 groups.append(g)
             else:
+                best_group.news.append(elem)
                 self._recalculate_group_after_add(best_group, elem)
 
         # step 4: if distance of two groups is smaller than a threshold,
