@@ -27,7 +27,6 @@ def fetch_news(rss_entry):
     sanitizer = sanitizer.Sanitizer()
     npf = NewsParserFactory()
 
-    news = []
     try:
         connection = urlopen(rss_entry.url)
         parser = npf.new(rss_entry.url)
@@ -82,7 +81,6 @@ class NewsFetcher(object):
         pool = Pool(processes=10)
         rss_entries = pool.map(fetch_entry, NewsFetcher.rss_urls)
         rss_entries = [item for sublist in rss_entries for item in sublist if item ]
-        print len(rss_entries)
         return rss_entries
 
     def fetch_and_parse_news(self, rss_entries):
@@ -91,19 +89,19 @@ class NewsFetcher(object):
 
         pool = Pool(processes=5)
         news = pool.map(fetch_news, rss_entries)
-        print len(news)
         return news
 
     def run(self):
         from dbfrontend import DBProxy
         rss_entries = self.fetch_rss_entries()
-        news = self.fetch_and_parse_news(rss_entries)
-        for n in news:
-            print n.title
-            print n.body[0:100]
-            print ""
         db = DBProxy()
-        db.add_list_of_news_if_not_duped(news)
+        db_news = db.get_all_news()
+        unique_rss_entries = [rss for rss in rss_entries if rss.url not in [n.url for n in db_news]]
+      #  print [rss.url for rss in unique_rss_entries]
+      #  quit()
+        news = self.fetch_and_parse_news(unique_rss_entries)
+        news = [n for n in news if n]
+        db.add_list_of_news(news)
 
 if __name__ == "__main__":
     news_fetcher = NewsFetcher()
