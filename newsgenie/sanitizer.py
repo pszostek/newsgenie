@@ -31,7 +31,6 @@ class Sanitizer(object):
         else:
             #date is like DDD, dd mmm yyyy hh:mm:ss +0100
             offset = rss_date[-5:]
-            print rss_date
             rss_date = rss_date[:-5]
             rss_date = rss_date.strip()
             if offset[0] == "-":
