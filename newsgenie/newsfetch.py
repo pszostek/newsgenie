@@ -15,6 +15,7 @@ def fetch_entry(url):
         new_rss_entries = [e for e in new_rss_entries if e.title and e.url and e.date]
     except Exception, e:
         #LOG HERE
+        print "fetch_entry"
         print e
         return None
     return new_rss_entries
@@ -38,6 +39,7 @@ def fetch_news(rss_entry):
         news = News(title=rss_entry.title, body=content, clean_body=clean_body, url=rss_entry.url, date=rss_entry.date)
     except Exception, e:
         #LOG HERE
+        print "fetch_news"
         print e
         return None
     return news
@@ -81,6 +83,9 @@ class NewsFetcher(object):
         pool = Pool(processes=10)
         rss_entries = pool.map(fetch_entry, NewsFetcher.rss_urls)
         rss_entries = [item for sublist in rss_entries for item in sublist if item ]
+
+        pool.terminate()
+        pool.join()
         return rss_entries
 
     def fetch_and_parse_news(self, rss_entries):
@@ -89,10 +94,13 @@ class NewsFetcher(object):
 
         pool = Pool(processes=5)
         news = pool.map(fetch_news, rss_entries)
+        pool.terminate()
+        pool.join()
         return news
 
     def run(self):
         from dbfrontend import DBProxy
+        import sanitizer
         rss_entries = self.fetch_rss_entries()
         db = DBProxy()
         db_news = db.get_all_news()
@@ -101,6 +109,11 @@ class NewsFetcher(object):
       #  quit()
         news = self.fetch_and_parse_news(unique_rss_entries)
         news = [n for n in news if n]
+
+        sanitizier = sanitizer.Sanitizer()
+        news = [sanitizer.cleanup_news(n) for n in news]
+        print len(news)
+        print(str([n.url for n in news]))
         db.add_list_of_news(news)
 
 if __name__ == "__main__":
