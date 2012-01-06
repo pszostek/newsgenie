@@ -6,7 +6,7 @@ import re
 WS = ' ' #word separator used in clean news' bodies
 stopwords = [u"a", u"aby", u"ach", u"acz", u"aczkolwiek", u"aj", u"albo", u"ale", u"ależ", u"ani", u"aż",
 u"bardziej", u"bardzo", u"bez", u"bo", u"bowiem", u"by", u"byli", u"bynajmniej", u"być", u"był", u"była",
-u"było", u"były", u"będzie", u"będą", u"cali", u"cała", u"cały", u"ci", u"cię", u"ciebie", u"co", u"cokolwiek",
+u"było", u"były", u"będzie", u"będą", u"cali", u"cała", u"cały", u"chyba", u"ci", u"cię", u"ciebie", u"co", u"cokolwiek",
 u"coś", u"czasami", u"czasem", u"czemu", u"czy", u"czyli", u"daleko", u"dla", u"dlaczego", u"dlatego", u"do",
 u"dobrze", u"dokąd", u"dość", u"dużo", u"dwa", u"dwaj", u"dwie", u"dwoje", u"dziś", u"dzisiaj", u"gdy", u"gdyby",
 u"gdyż", u"gdzie", u"gdziekolwiek", u"gdzieś", u"go", u"i", u"ich", u"ile", u"im", u"inna", u"inne", u"inny", u"innych",
@@ -40,6 +40,7 @@ class Sanitizer(object):
             text_after = s[end_index+len("</script>"):]
             s = text_before + text_after
         return s
+
     def remove_blanks(self, s):
         last_char = None
         ret = ""
@@ -82,5 +83,5 @@ class Sanitizer(object):
 
     def cleanup_news(self, news):
         news = news.split(" ")
-        clean_news = self.remove_stopwords(list_of_words)
+        clean_news = self.remove_stopwords(news)
         return WS.join(clean_news)
