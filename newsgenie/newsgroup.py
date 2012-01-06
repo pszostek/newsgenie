@@ -52,7 +52,7 @@ class NewsGroup(object):
     def jaccard_index(self, v1, v2):
         v1_and_v2 = [w for w in v1.keys() if w in v2.keys()]
         v1_or_v2 = list(set(v1.keys() + v2.keys()))
-        return float(v1_and_v2)/float(v1_or_v2)
+        return float(len(v1_and_v2))/float(len(v1_or_v2))
 
     def _recalculate_group_after_add(self, group, vector):
         result = {}
@@ -66,9 +66,8 @@ class NewsGroup(object):
         for word in result:
             result[word] /= len(group.news) + 1
 
-        #group's will be change externaly
-        group.center = result
-        #no return
+        return Group(center = result, news = group.news)
+
 
     def _merge_groups(self, g1, g2):
         result = {}
@@ -111,7 +110,7 @@ class NewsGroup(object):
             best_group = None
             for group in groups:
                 dist = distance_function(elem, group.center)
-                if dist < threshold:
+                if dist < threshold: #choose this group for merge
                     if best_group == None: # no best group for this element
                        best_group = group
                        min_dist = dist
@@ -119,12 +118,14 @@ class NewsGroup(object):
                         if dist < min_dist:
                             best_group = group
                             min_dist = dist
+                        else:
+                            pass #there already chosen group is better
             if best_group == None:
                 g = Group(news=list(elem), center=elem)
                 groups.append(g)
             else:
                 best_group.news.append(elem)
-                self._recalculate_group_after_add(best_group, elem)
+                best_group = self._recalculate_group_after_add(best_group, elem)
 
         # step 4: if distance of two groups is smaller than a threshold,
         # merge these two groups and calculate the new center
