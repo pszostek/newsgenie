@@ -16,6 +16,7 @@ class News(object):
     clean_body = Column(String) #news' body after stemming
     url = Column(String(150)) #news' location at actual media page
     date = Column(Integer) #issuing date as seconds from epoch
+    vector = Column(String)
 
     def __unicode__(self):
         ret = str(self.id) + "\n"
@@ -43,6 +44,8 @@ class DBProxy(object):
         if name == "_news":
             if self._news_gotten_from_db == False:
                 self._news = self._db.session.query(News).all()
+                for n in self._news:
+                    n.vector = deserialize(vector)
                 self._news_gotten_from_db = True
             return object.__getattribute__(self, "_news")
         else:
