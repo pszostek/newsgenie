@@ -3,29 +3,32 @@
 
 
 from collections import namedtuple
+from sanitizer import WS
 Group = namedtuple('Group', ['center', 'news'], verbose=False)
 
 class NewsGroup(object):
     def __init__(self):
         pass
 
-    def binary_reduce(self, news, ngram=1):
+    def quantity_reduce(self, news, ngram=1):
         """ make a binary vector from a text corpus """
         ret = {}
         if len(news.clean_body) == 0:
             raise RuntimeError
 
-        for word in news.clean_body:
+        body = news.clean_body.split(WS)
+        for word in body:
             try:
                 ret[word] += 1
             except:
                 ret[word] = 1
         return ret
 
-    def quantity_reduce(self, news, ngram=1):
+    def binary_reduce(self, news, ngram=1):
         """ make a quantity vector from a text corpus """
         ret = {}
-        for word in news.clean_body:
+        body = news.clean_body.split(WS)
+        for word in body:
             ret[word] = 1
         return ret
 
@@ -84,7 +87,7 @@ class NewsGroup(object):
             result[word] /= result_len
         #new group consists of news taken from both groups
         new_group_news = g1.news + g2.news
-        ret = Group(center = result, new_group_news)
+        ret = Group(center = result, news = new_group_news)
         return ret
     
     def group(self, list_of_vectors, threshold, distance_function):
