@@ -3,8 +3,8 @@
 
 
 from collections import namedtuple
+from dbfrontend import News, Cluster
 from sanitizer import WS
-Group = namedtuple('Group', ['center', 'news'], verbose=False)
 
 class NewsGroup(object):
     def __init__(self):
@@ -54,22 +54,22 @@ class NewsGroup(object):
         v1_or_v2 = list(set(v1.keys() + v2.keys()))
         return float(len(v1_and_v2))/float(len(v1_or_v2))
 
-    def _recalculate_group_after_add(self, group, vector):
+    def _add_and_recalculate_cluster(self, cluster, vector):
         result = {}
-        for word in group.center.keys():
-            result[word] = len(group.news)*group.center[word]
+        for word in cluster.center.keys():
+            result[word] = len(cluster.news)*cluster.center[word]
         if word in result:
             result[word] += vector[word]
         else:
             result[word] = vector[word]
 
         for word in result:
-            result[word] /= len(group.news) + 1
+            result[word] /= len(cluster.news) + 1
 
-        return Group(center = result, news = group.news)
+        cluster.center = result
+        cluser.news.append(vector)
 
-
-    def _merge_groups(self, g1, g2):
+    def _merge_clusters(self, g1, g2):
         result = {}
         g1_len = len(g1.news)
         g2_len = len(g2.news)
@@ -86,7 +86,7 @@ class NewsGroup(object):
             result[word] /= result_len
         #new group consists of news taken from both groups
         new_group_news = g1.news + g2.news
-        ret = Group(center = result, news = new_group_news)
+        ret = Cluster(center = result, news = new_group_news)
         return ret
     
     def group(self, list_of_vectors, threshold, distance_function):
@@ -97,7 +97,7 @@ class NewsGroup(object):
 
         groups = []
         # step 2: take the first news, let it be a seed of the first group
-        g = Group(news=list(list_of_vectors[0]), center=list_of_vectors[0])
+        g = Cluster(news=list(list_of_vectors[0]), center=list_of_vectors[0])
         groups.append(g)
         ungrouped = ungrouped[1:]
         # step 3: for each ungrouped element find its distance from
@@ -121,11 +121,12 @@ class NewsGroup(object):
                         else:
                             pass #there already chosen group is better
             if best_group == None:
-                g = Group(news=list(elem), center=elem)
+                g = Cluster(news=list(elem), center=elem)
+                elem.cluster = g
                 groups.append(g)
             else:
-                best_group.news.append(elem)
-                best_group = self._recalculate_group_after_add(best_group, elem)
+                self._add_and_recalculate_cluster(best_group, elem)
+                elem.cluster = best_grop
 
         # step 4: if distance of two groups is smaller than a threshold,
         # merge these two groups and calculate the new center
@@ -142,7 +143,7 @@ class NewsGroup(object):
                     dist = distance_function(g1.center, g2.center)
                     if dist < threshold:
                         any_changes = True
-                        g = self._merge_groups(g1,g2)
+                        g = self._merge_clusters(g1,g2)
                         groups.remove(g1)
                         groups.remove(g2)
                         groups.append(g)
