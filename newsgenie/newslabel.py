@@ -6,6 +6,7 @@ from newsgroup import Group
 class NewsLabel(object):
     def __init__(self):
         pass
+
     def label(self, number_of_terms):
         from dbfrontend import DBProxy
         db = DBProxy()
@@ -23,7 +24,7 @@ class NewsLabel(object):
                     docs_w_term_o_cluster += len([n for n in clus.news if term in n.vector])
                 docs_w_term_o_cluster -= docs_w_term_in_cluster
                 docs_wo_term_o_cluster = all_documents - docs_w_term_o_cluster - len(c.news)
-    
+
                 e_0_0 = 
                 o_0_0 =
                 x_0_0 =
