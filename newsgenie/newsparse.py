@@ -222,7 +222,11 @@ class WPParser(IParser, HTMLParser, object):
             self.feed(s)
         except Exception as e:
             print e
-        return " ".join(self._data)
+        ret = " ".join(self._data)
+        if ret[-1] == ')':
+            bracket_index = ret.rfind("(")
+            ret = ret[:bracket_index]
+        return ret
 
 class RPParser(IParser, HTMLParser, object):
     def __init__(self):
