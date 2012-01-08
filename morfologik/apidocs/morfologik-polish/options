@@ -1,0 +1,28 @@
+-classpath
+'/home/dweiss/work/morfologik/morfologik-polish/target/classes:/home/dweiss/work/morfologik/morfologik-fsa/target/morfologik-fsa-1.5.2.jar:/home/dweiss/work/morfologik/morfologik-stemming/target/morfologik-stemming-1.5.2.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'/home/dweiss/work/morfologik/morfologik-polish/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2011. All Rights Reserved.'
+-charset
+'UTF-8'
+-d
+'/home/dweiss/work/morfologik/morfologik-polish/target/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'Morfologik Stemming Dictionary for Polish v1.5.2 API Documentation'
+-linkoffline
+'http://morfologik.blogspot.com/morfologik-fsa/apidocs' '/home/dweiss/work/morfologik/morfologik-fsa/target/apidocs'
+-linkoffline
+'http://morfologik.blogspot.com/morfologik-stemming/apidocs' '/home/dweiss/work/morfologik/morfologik-stemming/target/apidocs'
+-linkoffline
+'http://morfologik.blogspot.com/morfologik-tools/apidocs' '/home/dweiss/work/morfologik/morfologik-tools/target/apidocs'
+-use
+-version
+-windowtitle
+'Morfologik Stemming Dictionary for Polish v1.5.2 API Documentation'
