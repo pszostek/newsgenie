@@ -78,10 +78,37 @@ class Sanitizer(object):
             ts = int(ts) + offset
             return ts
 
-    def remove_stopwords(self, list_of_words):
+    def _lower(self, list_of_words):
+        ret = []
+        for word in list_of_words:
+            ret.append(word.lower())
+        return ret
+
+    def _remove_stopwords(self, list_of_words):
         return [word for word in list_of_words if word not in stopwords]
 
-    def cleanup_news(self, news):
-        news = news.split(" ")
-        clean_news = self.remove_stopwords(news)
-        return WS.join(clean_news)
+    def _remove_punctuation(self, text):
+        from string import punctuation
+        ret = text
+        for p in punctuation:
+            ret = ret.replace(p,'')
+        return ret
+
+    def _cleanup_text(self, text):
+        text = self._remove_punctuation(text)
+        words = text.split(WS)
+        words = self._remove_stopwords(words)
+        words = self._lower(words)
+        return WS.join(words)
+
+    def run(self, news):
+        for n in news:
+            n.clean_body = 3*(self._cleanup_text(n.title)+WS) + self._cleanup_text(n.body)
+
+if __name__ == "__main__":
+    from dbfrontend import DBProxy
+    db = DBProxy()
+    news = db.get_all_news()
+    s = Sanitizer()
+    s.run(news)
+    db.add_list(news)
