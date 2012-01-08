@@ -9,13 +9,14 @@ def fetch_entry(url):
     import sanitizer
     sanitizer = sanitizer.Sanitizer()
     try:
+        print "fetch_entry " + str(url)
         rss = RssLib.RssLib(url).read()
         rss_date = [sanitizer.convert_to_timestamp(d) for d in rss["pubDate"]]
         new_rss_entries = map(RssEntry._make, zip(rss["title"], rss["link"], rss_date))
         new_rss_entries = [e for e in new_rss_entries if e.title and e.url and e.date]
     except Exception, e:
         #LOG HERE
-        print "fetch_entry"
+        print "fetch_entry exception " + str(url)
         print e
         return None
     return new_rss_entries
@@ -29,17 +30,18 @@ def fetch_news(rss_entry):
     npf = NewsParserFactory()
 
     try:
-        connection = urlopen(rss_entry.url)
+        print "fetch_news " + rss_entry.url
+        connection = urlopen(rss_entry.url, timeout = 60)
         parser = npf.new(rss_entry.url)
         encoding = connection.headers.getparam('charset')
         content = connection.read().decode(encoding)
         content = sanitizer.remove_js(content)
         content = parser.parse(content)
         clean_body = ""
-        news = News(title=rss_entry.title, body=content, clean_body=clean_body, url=rss_entry.url, date=rss_entry.date)
+        news = News(title=rss_entry.title, body=content,url=rss_entry.url, date=rss_entry.date)
     except Exception, e:
         #LOG HERE
-        print "fetch_news"
+        print "fetch_news exception"
         print e
         return None
     return news
@@ -68,11 +70,11 @@ class NewsFetcher(object):
     "http://www.tvn24.pl/sport.xml", #sport
     "http://www.tvn24.pl/biznes.xml", #gospodarka
     #RZECZPOSPOLITA
-    "http://www.rp.pl/rss/2.html", #ogolne
-    "http://www.rp.pl/rss/10.html", #kraj
-    "http://www.rp.pl/rss/11.html", #swiat
-    "http://www.rp.pl/rss/12.html", #sport
-    "http://www.rp.pl/rss/5.html" #ekonomia
+#    "http://www.rp.pl/rss/2.html", #ogolne
+#    "http://www.rp.pl/rss/10.html", #kraj
+#    "http://www.rp.pl/rss/11.html", #swiat
+#    "http://www.rp.pl/rss/12.html", #sport
+#    "http://www.rp.pl/rss/5.html" #ekonomia
     ]
 
     def __init__(self):
@@ -82,10 +84,12 @@ class NewsFetcher(object):
         """ Fetch rss by running multiple instances of fetch_entry function """
         pool = Pool(processes=10)
         rss_entries = pool.map(fetch_entry, NewsFetcher.rss_urls)
-        rss_entries = [item for sublist in rss_entries for item in sublist if item ]
+        rss_entries = [item for sublist in rss_entries if sublist for item in sublist if item ]
+        print "fetch_rss_entries fetched " + str(len(rss_entries)) + " entries"
 
         pool.terminate()
         pool.join()
+        
         return rss_entries
 
     def fetch_and_parse_news(self, rss_entries):
@@ -94,6 +98,9 @@ class NewsFetcher(object):
 
         pool = Pool(processes=5)
         news = pool.map(fetch_news, rss_entries)
+        news = [n for n in news if n]
+        print "fetch_and_parse_news fetched " + str(len(news)) + " news"
+
         pool.terminate()
         pool.join()
         return news
@@ -104,17 +111,11 @@ class NewsFetcher(object):
         rss_entries = self.fetch_rss_entries()
         db = DBProxy()
         db_news = db.get_all_news()
-        unique_rss_entries = [rss for rss in rss_entries if rss.url not in [n.url for n in db_news]]
-      #  print [rss.url for rss in unique_rss_entries]
-      #  quit()
+        db_urls = [n.url for n in db_news]
+        unique_rss_entries = [rss for rss in rss_entries if rss.url not in db_urls]
         news = self.fetch_and_parse_news(unique_rss_entries)
         news = [n for n in news if n]
-
-        sanitizier = sanitizer.Sanitizer()
-        news = [sanitizer.cleanup_news(n) for n in news]
-        print len(news)
-        print(str([n.url for n in news]))
-        db.add_list_of_news(news)
+        db.add_list(news)
 
 if __name__ == "__main__":
     news_fetcher = NewsFetcher()
