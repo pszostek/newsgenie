@@ -94,21 +94,61 @@ class Sanitizer(object):
             ret = ret.replace(p,'')
         return ret
 
+    def _stem(self, list_of_words):
+        from popen2 import popen2
+        pass
+
     def _cleanup_text(self, text):
-        text = self._remove_punctuation(text)
         words = text.split(WS)
+        self._find_eigennames(words)
+        text = self._remove_punctuation(text)
         words = self._remove_stopwords(words)
         words = self._lower(words)
         return WS.join(words)
 
+    def _remove_roman_numbers(self, list_of_words):
+        ret = []
+        for word in list_of_words:
+            #if:
+                #ret.append(word)
+        return ret
+
+    def _find_eigennames(self, text):
+        from string import ascii_uppercase
+        eigennames = {}
+        text = text.replace(',','')
+        words = text.split(' ')
+
+        #first iteration - find words not staying after a dot
+        for index in range(1, len(words)): #screw the first word
+            if words[index][0] in ascii_uppercase:
+                if words[index-1][-1] == '.?!':
+                    pass #screw if the previous word was followed by a dot
+                else:
+                    try:
+                        eigennames[word.lower()] += 1
+                    except:
+                        eigennames[word.lower()] = 1
+            prev_word = word
+
+        #second iteration - find words after dots that were stated eigennames in the first pass
+        for index in range(0, len(words)):
+            if words[index] in ascii_uppercase:
+                if index == 0 or words[index-1][-1] in '.?!'
+                    if word.lower() in eigennames.keys():
+                        eigennames[word.lower()] += 1
+        from pprint import pprint
+        pprint(eigennames)
+
     def run(self, news):
         for n in news:
-            n.clean_body = 3*(self._cleanup_text(n.title)+WS) + self._cleanup_text(n.body)
+            n.clean_body = self._cleanup_text(3*(n.title+WS) + n.body)
 
 if __name__ == "__main__":
     from dbfrontend import DBProxy
     db = DBProxy()
     news = db.get_all_news()
+    #news = [n for n in news if not n.clean_body]
     s = Sanitizer()
     s.run(news)
-    db.add_list(news)
+    #db.add_list(news)
