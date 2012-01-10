@@ -95,8 +95,11 @@ class Sanitizer(object):
         return ret
 
     def _stem(self, list_of_words):
-        from popen2 import popen2
-        pass
+        from subprocess import Popen, PIPE
+        stemmer = Popen(["java","-jar","../morfologik/morfologik-tools-1.5.2-standalone.jar","plstem"],
+        shell=False, stdout=PIPE, stdin=PIPE)
+        output = stemmer.communicate(" ".join(list_of_words))
+        dalej
 
     def _cleanup_text(self, text):
         words = text.split(WS)
@@ -105,13 +108,6 @@ class Sanitizer(object):
         words = self._remove_stopwords(words)
         words = self._lower(words)
         return WS.join(words)
-
-    def _remove_roman_numbers(self, list_of_words):
-        ret = []
-        for word in list_of_words:
-            #if:
-                #ret.append(word)
-        return ret
 
     def _find_eigennames(self, text):
         from string import ascii_uppercase
