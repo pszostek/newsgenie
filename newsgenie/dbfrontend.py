@@ -51,6 +51,14 @@ class DBProxy(object):
     def get_all_clusters(self):
         return self._db.session.query(Cluster).all()
 
+    def delete(self, sth):
+        self._db.session.delete_then_commit(sth)
+
+    def delete_list(self, list_of_sth):
+        for sth in list_of_sth:
+            self._db.session.delete(sth)
+        self._db.session.commit()
+
     def delete_all_clusters(self):
         for c in self.get_all_clusters():
             self._db.session.delete(c)
@@ -84,9 +92,16 @@ class DBProxy(object):
     def count_news(self):
         return len(self.get_all_news())
 
+    def delete_duplicated_news(self):
+    news = self.get_all_news()
+    counter = 0
+    for n in news:
+        if not n.body:
+            self.delete(n)
+            counter += 1
+    return counter
 if __name__ == "__main__":
     db = DBProxy()
-    
-    news = News(vector={"dsd":11},title="sads", body="asdssd", clean_body="sadads", url="sss  a", date=1234)
-    db.add(news)
-    print db.count_news()    
+    counter = db.delete_duplicated_news()
+
+    print("Removed " + str(counter) + " uncomplete news")

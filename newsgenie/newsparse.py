@@ -307,4 +307,3 @@ if __name__=="__main__":
         content = connection.read().decode(encoding)
         content = sanitizer.remove_js(content)
         print("\n\n" + url + "\n" + parser.parse(content))
-    

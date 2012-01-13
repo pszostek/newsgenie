@@ -85,9 +85,10 @@ class NewsFetcher(object):
         pool = Pool(processes=10)
         rss_entries = pool.map(fetch_entry, NewsFetcher.rss_urls)
         rss_entries = [item for sublist in rss_entries if sublist for item in sublist if item ]
+
         pool.close()
         pool.join()
-        
+
         return rss_entries
 
     def fetch_and_parse_news(self, rss_entries):
@@ -97,8 +98,10 @@ class NewsFetcher(object):
         pool = Pool(processes=5)
         news = pool.map(fetch_news, rss_entries)
         news = [n for n in news if n]
+
         pool.close()
         pool.join()
+
         return news
 
     def run(self):
@@ -108,7 +111,13 @@ class NewsFetcher(object):
         db = DBProxy()
         db_news = db.get_all_news()
         db_urls = [n.url for n in db_news]
-        unique_rss_entries = [rss for rss in rss_entries if rss.url not in db_urls]
+        yet_unfetched_entries = [rss for rss in rss_entries if rss.url not in db_urls]
+        unique_rss_entries = []
+
+        for entry in yet_unfetched_entries:
+            if entry.url not in [e.url for e in unique_rss_entries]:
+                unique_rss_entries.append(entry)
+
         print "There are " + str(len(unique_rss_entries)) + " news entries" 
         news = self.fetch_and_parse_news(unique_rss_entries)
         print "Fetched "+ str(len(news)) + " news"

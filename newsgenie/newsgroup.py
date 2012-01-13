@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-
 from collections import namedtuple
 from dbfrontend import News, Cluster
 
@@ -90,7 +89,7 @@ class NewsGroup(object):
             n.cluster_id = ret.id
         db.add_list(new_clusters_news)
         return ret
-    
+
     def group(self, db, list_of_news, threshold, distance_function):
         if len(list_of_news) == 0:
             raise RuntimeError("List of news cannot be empty")
@@ -166,7 +165,7 @@ class NewsGroup(object):
         clusters = self.group(db, news, threshold, distance_function)
         db.add_list(clusters)
         return clusters
-        
+
 if __name__ == "__main__":
     news_grouper = NewsGroup()
     news_grouper.run(news_grouper.cosine_distance, news_grouper.quantity_reduce, 0.4)

@@ -8,12 +8,8 @@ class NewsLabel(object):
         pass
 
     def label(self, number_of_terms):
-        from dbfrontend import DBProxy
-        db = DBProxy()
-        news = db.get_all_news()
-        clusters = db.get_all_groups()
+
         all_documents = len(news)
-        
 
         for c in clusters: #iterate over all terms
             for term in c.center:
@@ -54,3 +50,7 @@ class NewsLabel(object):
             if term in news.vector:
                 ret += 1.0
         return ret
+
+if __name__ == "__main__":
+    nl = NewsLabel()
+    nl.run()

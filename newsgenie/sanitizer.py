@@ -65,7 +65,7 @@ class GoogleSearch(object):
             self._count = int(''.join(json['responseData']['cursor']['resultCount'].split()))
         except KeyError:
             self._count = 0
-        
+
     def get_count(self):
         return self._count
 
@@ -80,12 +80,13 @@ class GoogleSearch(object):
         return None
     def get_phrase(self):
         return self._phrase
+
 class WikiSearch(object):
     WIKI_API_URL = "http://pl.wikipedia.org/w/api.php?action=opensearch&%s"
     def __init__(self, phrase):
         import urllib
         import simplejson
-        
+
         self._phrase = phrase
         self._results = []
         search = urllib.urlencode({"search": self._phrase})
@@ -204,8 +205,6 @@ class Sanitizer(object):
             return text
 
     def _divide_into_sentences(self, text):
-        from string import ascii_uppercase as UC
-        UC = UC + "ŁŻŹĄĆĘÓ"
         temp = []
 
         last_cut = -1
@@ -225,33 +224,31 @@ class Sanitizer(object):
         return [s for s in ret if s]
 
     def _extract_title(self, sentence, index):
-        from string import ascii_uppercase as UC
-        UC = UC + "ŁŻŹĄĆĘÓ"
         ret = [sentence[index]]
         while True:
             index = index+1
             try:
-                if sentence[index][0] in UC:
+                if self._istitle(sentence[index]):
                     ret.append(sentence[index])
                 else:
                     break
             except:
                 break
         return " ".join(ret)
-        
+
     def _istitle(self, text):
         from string import ascii_uppercase as UC
-        return (text[0] in UC) or (text[0]=='"' and text[1] in UC)
-    def _find_eigennames(self, text):
-        from string import ascii_uppercase as UC
         UC = UC + "ŁŻŹĄĆĘÓ".decode("utf-8")
+        return (text.decode("utf-8")[0] in UC) or (text[0]=='"' and text[1] in UC
+
+    def _find_eigennames(self, text):
         from collections import defaultdict
         eigennames = defaultdict(int) 
         text = text.replace(',', '')
         text = text.replace(':', '')
         print text
         sentences = self._divide_into_sentences(text)
-        
+
         istitle = self._istitle
         #first iteration
         for sentence in sentences:
@@ -259,10 +256,10 @@ class Sanitizer(object):
             inside_long_name = False
             for index in range(2, len(sentence)): #start with third word (first is capital)
                 try:
-                    if sentence[index].decode("utf-8")[0] in UC:
+                    if istitle(sentence[index]):
                         if not inside_long_name:
                             try:
-                                if sentence[index+1].decode("utf-8")[0] in UC: #two capitals in a row - long name
+                                if istitle(sentence[index+1]): #two capitals in a row - long name
                                     name = self._extract_title(sentence, index) stworzyć osobną kategorię dla długich
                                     inside_long_name = True
                                 else:
@@ -281,11 +278,11 @@ class Sanitizer(object):
         #second iteration - find words after dots that were stated eigennames in the first pass
         suspected = defaultdict(int)
         for sentence in sentences:
-            if sentence[0].decode("utf-8")[0] in UC:
-                if sentence[0] in eigennames.keys(): #if already found elsewhere -> add
+            if istitle(sentence[0]):
+                if sentence[0] in eigennames.keys(): #if already found elsewhere as eigenname-> add
                     eigennames[sentence[0]] += 1
                 try:
-                    if sentence[1].decode("utf-8")[0] in UC: #if the second word is also capital -> extract long name
+                    if istitle(sentence[1]): #if the second word is also capital -> extract long name
                         title = self._extract_title(sentence, 0)
                         suspected[title] += 1
                     else:
@@ -307,7 +304,7 @@ class Sanitizer(object):
                 sum = suspected[name] + eigennames[name]
                 eigennames.pop(name)
                 eigennames[name] = sum
-        
+
         names_wiki = defaultdict(list)
         for name in eigennames:
             try:
@@ -348,8 +345,10 @@ class Sanitizer(object):
                     pass
                 return url
         return None
+
     def remove_quotes(self, content):
         return content.replace('a""', 'a"')
+
     def _cleanup_text(self, text):
         from pprint import pprint
         text = self._remove_abbreviations(text)
