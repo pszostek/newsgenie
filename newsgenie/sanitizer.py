@@ -3,31 +3,128 @@
 
 import re
 
-WS = ' ' #word separator used in clean news' bodies
-stopwords = [u"a", u"aby", u"ach", u"acz", u"aczkolwiek", u"aj", u"albo", u"ale", u"ależ", u"ani", u"aż",
-u"bardziej", u"bardzo", u"bez", u"bo", u"bowiem", u"by", u"byli", u"bynajmniej", u"być", u"był", u"była",
-u"było", u"były", u"będzie", u"będą", u"cali", u"cała", u"cały", u"chyba", u"ci", u"cię", u"ciebie", u"co", u"cokolwiek",
-u"coś", u"czasami", u"czasem", u"czemu", u"czy", u"czyli", u"daleko", u"dla", u"dlaczego", u"dlatego", u"do",
-u"dobrze", u"dokąd", u"dość", u"dużo", u"dwa", u"dwaj", u"dwie", u"dwoje", u"dziś", u"dzisiaj", u"gdy", u"gdyby",
-u"gdyż", u"gdzie", u"gdziekolwiek", u"gdzieś", u"go", u"i", u"ich", u"ile", u"im", u"inna", u"inne", u"inny", u"innych",
-u"iż", u"ja", u"ją", u"jak", u"jakaś", u"jakby", u"jaki", u"jakichś", u"jakie", u"jakiś", u"jakiż", u"jakkolwiek",
-u"jako", u"jakoś", u"je", u"jeden", u"jedna", u"jedno", u"jednak", u"jednakże", u"jego", u"jej", u"jemu", u"jest",
-u"jestem", u"jeszcze", u"jeśli", u"jeżeli", u"już", u"ją", u"każdy", u"kiedy", u"kilka", u"kimś", u"kto", u"ktokolwiek",
-u"ktoś", u"która", u"które", u"którego", u"której", u"który", u"których", u"którym", u"którzy", u"ku", u"lat",
-u"lecz", u"lub", u"ma", u"mają", u"mało", u"mam", u"mi", u"mimo", u"między", u"mną", u"mnie", u"mogą", u"moi", u"moim",
-u"moja", u"moje", u"może", u"możliwe", u"można", u"mój", u"mu", u"musi", u"my", u"na", u"nad", u"nam", u"nami", u"nas",
-u"nasi", u"nasz", u"nasza", u"nasze", u"naszego", u"naszych", u"natomiast", u"natychmiast", u"nawet", u"nią",
-u"nic", u"nich", u"nie", u"niego", u"niej", u"niemu", u"nigdy", u"nim", u"nimi", u"niż", u"no", u"o", u"obok",
-u"od", u"około", u"on", u"ona", u"one", u"oni", u"ono", u"oraz", u"oto", u"owszem", u"pan", u"pana", u"pani",
-u"po", u"pod", u"podczas", u"pomimo", u"ponad", u"ponieważ", u"powinien", u"powinna", u"powinni", u"powinno",
-u"poza", u"prawie", u"przecież", u"przed", u"przede", u"przedtem", u"przez", u"przy", u"roku", u"również",
-u"sam", u"sama", u"są", u"się", u"skąd", u"sobie", u"sobą", u"sposób", u"swoje", u"ta", u"tak", u"taka",
-u"taki", u"takie", u"także", u"tam", u"te", u"tego", u"tej", u"ten", u"teraz", u"też", u"to", u"tobą", u"tobie",
-u"toteż", u"trzeba", u"tu", u"tutaj", u"twoi", u"twoim", u"twoja", u"twoje", u"twym", u"twój", u"ty", u"tych",
-u"tylko", u"tym", u"u", u"w", u"wam", u"wami", u"was", u"wasz", u"wasza", u"wasze", u"we", u"według", u"wiele",
-u"wielu", u"więc", u"więcej", u"wszyscy", u"wszystkich", u"wszystkie", u"wszystkim", u"wszystko", u"wtedy",
-u"wy", u"właśnie", u"z", u"za", u"zapewne", u"zawsze", u"ze", u"zł", u"znowu", u"znów", u"został", u"żaden",
-u"żadna", u"żadne", u"żadnych", u"że", u"żeby"]
+stopwords = ["a", "aby", "ach", "acz", "aczkolwiek", "aj", "albo", "ale", "ależ", "ani", "aż",
+"bardziej", "bardzo", "bez", "bo", "bowiem", "by", "byli", "bynajmniej", "być", "był", "była",
+"było", "były", "będzie", "będą", "cali", "cała", "cały", "chyba", "ci", "cię", "ciebie", "co", "cokolwiek",
+"coś", "czasami", "czasem", "czem", "czy", "czyli", "daleko", "dla", "dlaczego", "dlatego", "do",
+"dobrze", "dokąd", "dość", "dużo", "dwa", "dwaj", "dwie", "dwoje", "dziś", "dzisiaj", "gdy", "gdyby",
+"gdyż", "gdzie", "gdziekolwiek", "gdzieś", "go", "i", "ich", "ile", "im", "inna", "inne", "inny", "innych",
+"iż", "ja", "ją", "jak", "jakaś", "jakby", "jaki", "jakichś", "jakie", "jakiś", "jakiż", "jakkolwiek",
+"jako", "jakoś", "je", "jeden", "jedna", "jedno", "jednak", "jednakże", "jego", "jej", "jem", "jest",
+"jestem", "jeszcze", "jeśli", "jeżeli", "już", "ją", "każdy", "kiedy", "kilka", "kimś", "kto", "ktokolwiek",
+"ktoś", "która", "które", "którego", "której", "który", "których", "którym", "którzy", "k", "lat",
+"lecz", "lub", "ma", "mają", "mało", "mam", "mi", "mimo", "między", "mną", "mnie", "mogą", "moi", "moim",
+"moja", "moje", "może", "możliwe", "można", "mój", "m", "musi", "my", "na", "nad", "nam", "nami", "nas",
+"nasi", "nasz", "nasza", "nasze", "naszego", "naszych", "natomiast", "natychmiast", "nawet", "nią",
+"nic", "nich", "nie", "niego", "niej", "niem", "nigdy", "nim", "nimi", "niż", "no", "o", "obok",
+"od", "około", "on", "ona", "one", "oni", "ono", "oraz", "oto", "owszem", "pan", "pana", "pani",
+"po", "pod", "podczas", "pomimo", "ponad", "ponieważ", "powinien", "powinna", "powinni", "powinno",
+"poza", "prawie", "przecież", "przed", "przede", "przedtem", "przez", "przy", "rok", "również",
+"sam", "sama", "są", "się", "skąd", "sobie", "sobą", "sposób", "swoje", "ta", "tak", "taka",
+"taki", "takie", "także", "tam", "te", "tego", "tej", "ten", "teraz", "też", "to", "tobą", "tobie",
+"toteż", "trzeba", "t", "tutaj", "twoi", "twoim", "twoja", "twoje", "twym", "twój", "ty", "tych",
+"tylko", "tym", "", "w", "wam", "wami", "was", "wasz", "wasza", "wasze", "we", "według", "wiele",
+"wiel", "więc", "więcej", "wszyscy", "wszystkich", "wszystkie", "wszystkim", "wszystko", "wtedy",
+"wy", "właśnie", "z", "za", "zapewne", "zawsze", "ze", "zł", "znow", "znów", "został", "żaden",
+"żadna", "żadne", "żadnych", "że", "żeby"]
+
+abbreviations = ["al.","adm.","afryk.","alb.","alg.","amer.","ang.","arab.","argent.","arm.",
+"art.","austr.","austral.","azer.","azerb.","azjat.","b","beng.","bp","bryt.","cieśn.","cz.m.",
+"czes.","dn.","dol.","duń.","dzis.", "ds.","dr","el.","fr.","g.","gen.","gm.","gr.","g-y","hiszp.",
+"hol.","im.","inst.","itd.","itp.","j.","jap.","jask.","k.","kan.","kl.","kol.","ks.","l.",
+"lp.","łac.","łot.","marsz.","m.in.","mc","mies.-miesiąc","muzułm.","nadl.","ndm","niem.","np.",
+"nr","o.","ob.","pers.","pl.","plut.","płk.","płw.","pol.","por.","ppor.","port.","pow.",
+"przeł.","przyl.","pust.","p.o.","pw.","ppoż.","r.","ros.","rz.","s.","ss.","sierż.",
+"sierż.","słow.","st.","st.","st.","st.","st.","st.","st.","śrdw.-łac.","św.","taj.",
+"trb.","trl.","tys.","tzn.","tzw.","ukr.","ul.","ur.","w.","wdp.","wg","w.","wł.",
+"właśc.","woj.","w-y","wyb.","zat.","zb.","zm."]
+
+class GoogleSearch(object):
+    GOOGLE_API_URL = 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&%s&%s&%s&%s'
+    GOOGLE_API_KEY = 'ABQIAAAAWxzylnyQ3kmXOQsTHcOpDBQIU6uL29HYXxXVHyHmw13EPtToKxQhUgekYLYIA4095rutV1Pi0Xz_VA'
+    def __init__(self, phrase, pages = 1):
+        import urllib
+        import simplejson
+
+        print phrase
+        self._phrase = phrase 
+        self._responseData = {}
+        self._results = []
+        query = urllib.urlencode({'q' : self._phrase})
+        lang = urllib.urlencode({'hl':'pl'})
+        key = urllib.urlencode({'key': GoogleSearch.GOOGLE_API_KEY})
+        for i in range(0,pages):
+            start = urllib.urlencode({'start': i})
+            url = GoogleSearch.GOOGLE_API_URL % (query, lang, start, key)
+            search_results = urllib.urlopen(url)
+            json = simplejson.loads(search_results.read())
+            print json
+            self._responseData.update(json['responseData'])
+            self._results.append(json['responseData']['results'])
+        try:
+            self._count = int(''.join(json['responseData']['cursor']['resultCount'].split()))
+        except KeyError:
+            self._count = 0
+        
+    def get_count(self):
+        return self._count
+
+    def get_urls(self):
+        return [entry['url'] for page in self._results for entry in page ]
+
+    def wiki(self):
+        for entry in self.get_urls():
+            if 'pl.wikipedia.org' in entry:
+               entry = entry.split('/')
+               return entry[-1]
+        return None
+    def get_phrase(self):
+        return self._phrase
+class WikiSearch(object):
+    WIKI_API_URL = "http://pl.wikipedia.org/w/api.php?action=opensearch&%s"
+    def __init__(self, phrase):
+        import urllib
+        import simplejson
+        
+        self._phrase = phrase
+        self._results = []
+        search = urllib.urlencode({"search": self._phrase})
+        url = WikiSearch.WIKI_API_URL % search
+        wiki_res = urllib.urlopen(url)
+        json = simplejson.loads(wiki_res.read())
+        print json
+        self._results  = json[1]
+    def get_results(self):
+        return self._results
+    def get_first_result(self):
+        try:
+            return self._results[0]
+        except:
+            return None
+class Stemmer(object):
+    def __init__(self):
+        import os
+        os.environ['PYTHONIOENCODING'] = 'utf-8'
+        pass
+
+    def stem(self, list_of_words):
+        from subprocess import Popen, PIPE
+        stemmer = Popen(["java","-jar","../morfologik/morfologik-tools-1.5.2-standalone.jar","plstem"],
+        shell=False, stdout=PIPE, stdin=PIPE, stderr=PIPE)
+        output = stemmer.communicate(" ".join(list_of_words))
+
+        prev_word = None
+        ret = []
+        for line in (output[0].split("\n"))[:-2]:
+            line = line.split("\t")
+            if prev_word == line[0]:
+                continue
+            if line[1] == '-':
+                pass #screw this word - is notrecognized by stemmer
+            else:
+                ret.append(line[1])
+            prev_word = line[0]
+        return ret
 
 class Sanitizer(object):
     def remove_js(self, s):
@@ -87,6 +184,10 @@ class Sanitizer(object):
     def _remove_stopwords(self, list_of_words):
         return [word for word in list_of_words if word not in stopwords]
 
+    def _remove_abbreviations(self, text):
+        words = text.split(" ")
+        return " ".join([word for word in words if word not in abbreviations])
+
     def _remove_punctuation(self, text):
         from string import punctuation
         ret = text
@@ -94,57 +195,192 @@ class Sanitizer(object):
             ret = ret.replace(p,'')
         return ret
 
-    def _stem(self, list_of_words):
-        from subprocess import Popen, PIPE
-        stemmer = Popen(["java","-jar","../morfologik/morfologik-tools-1.5.2-standalone.jar","plstem"],
-        shell=False, stdout=PIPE, stdin=PIPE)
-        output = stemmer.communicate(" ".join(list_of_words))
-        dalej
+    def _remove_trailing_dot(self, text):
+        if len(text) == 0:
+            return text
+        elif text[-1] == '.':
+            return text[:-1]
+        else:
+            return text
 
-    def _cleanup_text(self, text):
-        words = text.split(WS)
-        self._find_eigennames(words)
-        text = self._remove_punctuation(text)
-        words = self._remove_stopwords(words)
-        words = self._lower(words)
-        return WS.join(words)
+    def _divide_into_sentences(self, text):
+        from string import ascii_uppercase as UC
+        UC = UC + "ŁŻŹĄĆĘÓ"
+        temp = []
 
-    def _find_eigennames(self, text):
-        from string import ascii_uppercase
-        eigennames = {}
-        text = text.replace(',','')
-        words = text.split(' ')
+        last_cut = -1
+        for index in range(0, len(text)):
+            try:
+                if text[index] in '.?!' and text[index+1].isspace():
+                    temp.append(text[last_cut+1:index]) #screw the '.','?' or '!'
+                    last_cut = index
+            except IndexError:
+                temp.append(text[last_cut+1:])
+                break
+        if len(temp) == 0:
+            temp.append(text)
+        ret = []
+        for s in temp:
+            ret.append([w for w in s.split(" ") if w])
+        return [s for s in ret if s]
 
-        #first iteration - find words not staying after a dot
-        for index in range(1, len(words)): #screw the first word
-            if words[index][0] in ascii_uppercase:
-                if words[index-1][-1] == '.?!':
-                    pass #screw if the previous word was followed by a dot
+    def _extract_title(self, sentence, index):
+        from string import ascii_uppercase as UC
+        UC = UC + "ŁŻŹĄĆĘÓ"
+        ret = [sentence[index]]
+        while True:
+            index = index+1
+            try:
+                if sentence[index][0] in UC:
+                    ret.append(sentence[index])
                 else:
-                    try:
-                        eigennames[word.lower()] += 1
-                    except:
-                        eigennames[word.lower()] = 1
-            prev_word = word
+                    break
+            except:
+                break
+        return " ".join(ret)
+        
+    def _istitle(self, text):
+        from string import ascii_uppercase as UC
+        return (text[0] in UC) or (text[0]=='"' and text[1] in UC)
+    def _find_eigennames(self, text):
+        from string import ascii_uppercase as UC
+        UC = UC + "ŁŻŹĄĆĘÓ".decode("utf-8")
+        from collections import defaultdict
+        eigennames = defaultdict(int) 
+        text = text.replace(',', '')
+        text = text.replace(':', '')
+        print text
+        sentences = self._divide_into_sentences(text)
+        
+        istitle = self._istitle
+        #first iteration
+        for sentence in sentences:
+            #print "s" + str(sentence)
+            inside_long_name = False
+            for index in range(2, len(sentence)): #start with third word (first is capital)
+                try:
+                    if sentence[index].decode("utf-8")[0] in UC:
+                        if not inside_long_name:
+                            try:
+                                if sentence[index+1].decode("utf-8")[0] in UC: #two capitals in a row - long name
+                                    name = self._extract_title(sentence, index) stworzyć osobną kategorię dla długich
+                                    inside_long_name = True
+                                else:
+                                    name = sentence[index] #short name
+                            except IndexError:
+                                name = sentence[index]
+                            if name.lower() not in stopwords: #dont accept stopwords written in capital
+                                eigennames[name] += 1
+                        else:
+                            continue
+                    else:
+                        inside_long_name = False
+                except IndexError:
+                    pass
 
         #second iteration - find words after dots that were stated eigennames in the first pass
-        for index in range(0, len(words)):
-            if words[index] in ascii_uppercase:
-                if index == 0 or words[index-1][-1] in '.?!'
-                    if word.lower() in eigennames.keys():
-                        eigennames[word.lower()] += 1
-        from pprint import pprint
-        pprint(eigennames)
+        suspected = defaultdict(int)
+        for sentence in sentences:
+            if sentence[0].decode("utf-8")[0] in UC:
+                if sentence[0] in eigennames.keys(): #if already found elsewhere -> add
+                    eigennames[sentence[0]] += 1
+                try:
+                    if sentence[1].decode("utf-8")[0] in UC: #if the second word is also capital -> extract long name
+                        title = self._extract_title(sentence, 0)
+                        suspected[title] += 1
+                    else:
+                        if sentence[0].lower() not in stopwords:
+                            suspected[sentence[0]] += 1
+                except IndexError: #there is no second word
+                    suspected[sentence[0]] += 1
+        #third phase
+        from xgoogle.search import GoogleSearch
+        for name in suspected:
+            try:
+                w = GoogleSearch(name)
+                w._lang = "pl"
+                res = w.get_results()
+            except:
+                print "Can't acces google for lookup: " + name
+                res = []
+            if self._wiki_lookup(res):
+                sum = suspected[name] + eigennames[name]
+                eigennames.pop(name)
+                eigennames[name] = sum
+        
+        names_wiki = defaultdict(list)
+        for name in eigennames:
+            try:
+                w = GoogleSearch(name)
+                w._lang = "pl"
+                res = w.get_results()
+            except:
+                print "Can't acces google for lookup: " + name
+                res = []
+            names_wiki[self._wiki_lookup(res)].append(name)
+            #names_wiki[w.get_first_result()].append(name)
 
-    def run(self, news):
+        ret = defaultdict(int)
+        for wiki_name, names in names_wiki.items():
+            if wiki_name == None:
+                for n in names:
+                    ret[n.decode("utf-8")] = eigennames[n]
+            else:
+                ret[wiki_name] = 0
+                for name in names:
+                    ret[wiki_name] += eigennames[name]
+        #fourth phase
+        for name in sorted(eigennames.keys(), key=len, reverse=True):
+            print name
+            text = text.replace(name, '')
+        from pprint import pprint
+        return (text, ret)
+
+    def _wiki_lookup(self,  results):
+        from urllib import url2pathname
+        for res in results:
+            if 'pl.wikipedia.org' in res.url:
+                url = res.url.split("/")
+                url = url[-1].replace('_', ' ')
+                try:
+                    url = url2pathname(url)
+                except:
+                    pass
+                return url
+        return None
+    def remove_quotes(self, content):
+        return content.replace('a""', 'a"')
+    def _cleanup_text(self, text):
+        from pprint import pprint
+        text = self._remove_abbreviations(text)
+        text, eigennames = self._find_eigennames(text)
+        text = self._remove_punctuation(text)
+        words = text.split()
+        words = self._lower(words)
+        stem = Stemmer()
+        words = stem.stem(words)
+        words = self._remove_stopwords(words)
+        words = [w.decode("utf-8") for w in words]
+        return words, eigennames
+
+    def run(self):
+        from collections import defaultdict
+        from dbfrontend import DBProxy
+        db = DBProxy()
+        news = db.get_all_news()
+        news = [n for n in news if not n.clean_body and n.body]
         for n in news:
-            n.clean_body = self._cleanup_text(3*(n.title+WS) + n.body)
+            (words_body, names_body) = self._cleanup_text(n.body.encode("utf-8"))
+            (words_title, names_title) = self._cleanup_text(n.title.encode("utf-8"))
+            n.clean_body = words_body
+            n.clean_title = words_title
+            n.eigennames = defaultdict(int)
+            for name, num in names_title.items():
+                n.eigennames[name] += num
+            for name, num in names_body.items():
+                n.eigennames[name] += num
+            db.add(n)
 
 if __name__ == "__main__":
-    from dbfrontend import DBProxy
-    db = DBProxy()
-    news = db.get_all_news()
-    #news = [n for n in news if not n.clean_body]
     s = Sanitizer()
-    s.run(news)
-    #db.add_list(news)
+    s.run()

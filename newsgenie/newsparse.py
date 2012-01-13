@@ -28,14 +28,11 @@ class GazetaParser(HTMLParser, IParser, object):
     def handle_starttag(self, tag, attributes):
         if self._inside_article_lead:
             if tag == "div":
-                print "DUPA1"
-                print attributes
                 for key, value in attributes:
                     if key == "id" and value == "artykul":
                         self._inside_article_lead = False
                         self._inside_article = True
                         self._embedded_div = 0
-                        print "DUPA"
                         return
                 self._embedded_div += 1
             elif tag == "span":
@@ -117,6 +114,8 @@ class TVN24Parser(HTMLParser, IParser, object):
         elif self._inside_skrot and tag == 'div':
             self._inside_skrot = False
         elif self._inside_tresc:
+            if tag == "div":
+                self._embedded_div -= 1
             if tag == 'span':
                 if self._embedded_span == 0:
                     self._inside_tresc = False
@@ -124,6 +123,8 @@ class TVN24Parser(HTMLParser, IParser, object):
                     self._embedded_span -= 1
 
     def handle_data(self, s):
+        if self._embedded_div > 0:
+            return
         if self._inside_script or self._inside_strong:
             return
         if self._inside_skrot or self._inside_tresc:

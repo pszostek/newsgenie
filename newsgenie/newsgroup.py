@@ -4,31 +4,28 @@
 
 from collections import namedtuple
 from dbfrontend import News, Cluster
-from sanitizer import WS
 
 class NewsGroup(object):
+    TITLE_WEIGHT = 3
+    BODY_WEIGHT = 1
     def __init__(self):
         pass
 
-    def quantity_reduce(self, news, ngram=1):
+    def quantity_reduce(self, list_of_words):
         """ make a binary vector from a text corpus """
-        ret = {}
-        if len(news.clean_body) == 0:
+        from collections import defaultdict
+        ret = defaultdict(in) 
+        if len(list_of_words) == 0:
             raise RuntimeError
 
-        body = news.clean_body.split(WS)
-        for word in body:
-            try:
-                ret[word] += 1
-            except:
-                ret[word] = 1
+        for word in list_of_words:
+            ret[word] += 1
         return ret
 
-    def binary_reduce(self, news, ngram=1):
+    def binary_reduce(self, list_of_words):
         """ make a quantity vector from a text corpus """
         ret = {}
-        body = news.clean_body.split(WS)
-        for word in body:
+        for word in list_of_words:
             ret[word] = 1
         return ret
 
@@ -58,14 +55,12 @@ class NewsGroup(object):
         return float(len(v1_and_v2))/float(len(v1_or_v2))
 
     def _add_and_recalculate_cluster(self, cluster, news):
-        result = {}
+        from collections import defaultdict
+        result = defaultdict(int)
         for word in cluster.center.keys():
             result[word] = len(cluster.newss.all())*cluster.center[word]
         for word in news.vector:
-            if word in result:
-                result[word] += news.vector[word]
-            else:
-                result[word] = news.vector[word]
+            result[word] += news.vector[word]
 
         for word in result:
             result[word] /= len(cluster.newss.all()) + 1
@@ -111,7 +106,6 @@ class NewsGroup(object):
         #         center of each group. If for at least one group the distance
         #         is smaller than a threshold, assign this element to a group
         #         and recalculate group's center
-        next_ungrouped = []
         for elem in ungrouped:
             print "grouping " + elem.title
             min_dist = 0
@@ -163,8 +157,12 @@ class NewsGroup(object):
         db = DBProxy()
         db.delete_all_clusters()
         news = db.get_all_news()
+        tw = NewsGroup.TITLE_WEIGHT
+        bw = NewsGroup.BODY_WEIGHT
         for n in news:
-            n.vector = reduce_function(n)
+            a = reduce_function(n.clean_body)
+            b = reduce_function(n.clean_title)
+            n.vector = dict( (n, bw*a.get(n, 0)+tw*b.get(n, 0)) for n in set(a)|set(b) )
         clusters = self.group(db, news, threshold, distance_function)
         db.add_list(clusters)
         return clusters

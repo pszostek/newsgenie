@@ -20,10 +20,12 @@ class News(object):
     __metaclass__ = Database.DefaultMeta
     title = Column(String)
     body = Column(String)
-    clean_body = Column(String) #news' body after stemming
     url = Column(String(150)) #news' location at actual media page
+    clean_title = Column(PickleType) #list of words
+    clean_body = Column(PickleType) #list of words
     date = Column(Integer) #issuing date as seconds from epoch
     vector = Column(PickleType) #vector for news algorithm representation
+    eigennames = Column(PickleType) #dictionary of (name:quantity)
 
     def __unicode__(self):
         ret = str(self.id) + "\n"

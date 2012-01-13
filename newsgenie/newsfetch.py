@@ -36,8 +36,8 @@ def fetch_news(rss_entry):
         encoding = connection.headers.getparam('charset')
         content = connection.read().decode(encoding)
         content = sanitizer.remove_js(content)
+       # content = sanitizer.remove_quotes(content)
         content = parser.parse(content)
-        clean_body = ""
         news = News(title=rss_entry.title, body=content,url=rss_entry.url, date=rss_entry.date)
     except Exception, e:
         #LOG HERE
@@ -62,7 +62,7 @@ class NewsFetcher(object):
     #GAZETA
     "http://rss.gazeta.pl/pub/rss/wiadomosci_swiat.htm", #swiat
     "http://rss.gazeta.pl/pub/rss/wiadomosci_kraj.htm", #kraj
-    "http://gazeta.pl.feedsportal.com/c/32739/f/612804/index.rss", #sport
+  #  "http://gazeta.pl.feedsportal.com/c/32739/f/612804/index.rss", #sport
     "http://rss.feedsportal.com/c/32739/f/530278/index.rss", #gospodarka
     #TVN24
     "http://www.tvn24.pl/polska.xml", #polska
@@ -70,11 +70,11 @@ class NewsFetcher(object):
     "http://www.tvn24.pl/sport.xml", #sport
     "http://www.tvn24.pl/biznes.xml", #gospodarka
     #RZECZPOSPOLITA
-#    "http://www.rp.pl/rss/2.html", #ogolne
-#    "http://www.rp.pl/rss/10.html", #kraj
-#    "http://www.rp.pl/rss/11.html", #swiat
-#    "http://www.rp.pl/rss/12.html", #sport
-#    "http://www.rp.pl/rss/5.html" #ekonomia
+    "http://www.rp.pl/rss/2.html", #ogolne
+    "http://www.rp.pl/rss/10.html", #kraj
+    "http://www.rp.pl/rss/11.html", #swiat
+    "http://www.rp.pl/rss/12.html", #sport
+    "http://www.rp.pl/rss/5.html" #ekonomia
     ]
 
     def __init__(self):
@@ -85,9 +85,7 @@ class NewsFetcher(object):
         pool = Pool(processes=10)
         rss_entries = pool.map(fetch_entry, NewsFetcher.rss_urls)
         rss_entries = [item for sublist in rss_entries if sublist for item in sublist if item ]
-        print "fetch_rss_entries fetched " + str(len(rss_entries)) + " entries"
-
-        pool.terminate()
+        pool.close()
         pool.join()
         
         return rss_entries
@@ -99,9 +97,7 @@ class NewsFetcher(object):
         pool = Pool(processes=5)
         news = pool.map(fetch_news, rss_entries)
         news = [n for n in news if n]
-        print "fetch_and_parse_news fetched " + str(len(news)) + " news"
-
-        pool.terminate()
+        pool.close()
         pool.join()
         return news
 
@@ -113,7 +109,9 @@ class NewsFetcher(object):
         db_news = db.get_all_news()
         db_urls = [n.url for n in db_news]
         unique_rss_entries = [rss for rss in rss_entries if rss.url not in db_urls]
+        print "There are " + str(len(unique_rss_entries)) + " news entries" 
         news = self.fetch_and_parse_news(unique_rss_entries)
+        print "Fetched "+ str(len(news)) + " news"
         news = [n for n in news if n]
         db.add_list(news)
 
