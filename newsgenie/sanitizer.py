@@ -205,6 +205,7 @@ class Sanitizer(object):
             return text
 
     def _divide_into_sentences(self, text):
+        """ separate a concrete text into list of lists of words """
         temp = []
 
         last_cut = -1
@@ -224,6 +225,7 @@ class Sanitizer(object):
         return [s for s in ret if s]
 
     def _extract_title(self, sentence, index):
+        """ extract eigenname as a list of words """
         ret = [sentence[index]]
         while True:
             index = index+1
@@ -234,49 +236,53 @@ class Sanitizer(object):
                     break
             except:
                 break
-        return " ".join(ret)
+        return ret
 
     def _istitle(self, text):
+        """ check if word starts with upper case """
         from string import ascii_uppercase as UC
         UC = UC + "ŁŻŹĄĆĘÓ".decode("utf-8")
         return (text.decode("utf-8")[0] in UC) or (text[0]=='"' and text[1] in UC
 
     def _find_eigennames(self, text):
         from collections import defaultdict
-        eigennames = defaultdict(int) 
         text = text.replace(',', '')
         text = text.replace(':', '')
         print text
         sentences = self._divide_into_sentences(text)
-
         istitle = self._istitle
+
+        eigennames = defaultdict(int)
+        long_eigennames = defaultdict(int)
         #first iteration
         for sentence in sentences:
             #print "s" + str(sentence)
             inside_long_name = False
-            for index in range(2, len(sentence)): #start with third word (first is capital)
+            for index in range(1, len(sentence)): #start with third word (first is capital)
                 try:
                     if istitle(sentence[index]):
                         if not inside_long_name:
                             try:
                                 if istitle(sentence[index+1]): #two capitals in a row - long name
-                                    name = self._extract_title(sentence, index) stworzyć osobną kategorię dla długich
+                                    name = self._extract_title(sentence, index)
+                                    long_eigennames[name] += 1
                                     inside_long_name = True
                                 else:
                                     name = sentence[index] #short name
                             except IndexError:
                                 name = sentence[index]
-                            if name.lower() not in stopwords: #dont accept stopwords written in capital
+                            if name.lower() not in stopwords and not inside_long_name: #dont accept stopwords written in capital and don't add long names for the second time
                                 eigennames[name] += 1
                         else:
-                            continue
+                            continue #long name sequence still didn't change - continue
                     else:
-                        inside_long_name = False
+                        inside_long_name = False #if the word is not capital - finish long name sequence
                 except IndexError:
                     pass
 
         #second iteration - find words after dots that were stated eigennames in the first pass
         suspected = defaultdict(int)
+        suspected_long = defaultdict(int)
         for sentence in sentences:
             if istitle(sentence[0]):
                 if sentence[0] in eigennames.keys(): #if already found elsewhere as eigenname-> add
@@ -284,54 +290,60 @@ class Sanitizer(object):
                 try:
                     if istitle(sentence[1]): #if the second word is also capital -> extract long name
                         title = self._extract_title(sentence, 0)
-                        suspected[title] += 1
+                        if title in long_eigennames.keys():
+                            long_eigennames[title] += 1
+                        else:
+                            suspected_long[title] += 1
                     else:
                         if sentence[0].lower() not in stopwords:
                             suspected[sentence[0]] += 1
                 except IndexError: #there is no second word
                     suspected[sentence[0]] += 1
-        #third phase
-        from xgoogle.search import GoogleSearch
-        for name in suspected:
-            try:
-                w = GoogleSearch(name)
-                w._lang = "pl"
-                res = w.get_results()
-            except:
-                print "Can't acces google for lookup: " + name
-                res = []
-            if self._wiki_lookup(res):
-                sum = suspected[name] + eigennames[name]
-                eigennames.pop(name)
-                eigennames[name] = sum
 
+        #third phase = find if a name is in wiki
         names_wiki = defaultdict(list)
         for name in eigennames:
-            try:
-                w = GoogleSearch(name)
-                w._lang = "pl"
-                res = w.get_results()
-            except:
-                print "Can't acces google for lookup: " + name
-                res = []
+            res = self._google_lookup(name)
             names_wiki[self._wiki_lookup(res)].append(name)
-            #names_wiki[w.get_first_result()].append(name)
+        for name in long_eigennames:
+            res = self._google_lookup(' '.join(name))
+            names_wiki[self._wiki_lookup(res)].append(' '.join(name))
 
+        #fourth phase - treat suspected names
+        for name in suspected:
+            res = self._google_lookup(name)
+            wikiname = self._wiki_lookup(res):
+            if wikiname:
+                eigennames[wikiname] += suspected[name]
+
+        for name in suspected_long:
+            #check all prefixes
+            for i in range(1, len(name)):
+            ////////////////////
+        #fitfth phase
         ret = defaultdict(int)
         for wiki_name, names in names_wiki.items():
             if wiki_name == None:
                 for n in names:
                     ret[n.decode("utf-8")] = eigennames[n]
             else:
-                ret[wiki_name] = 0
                 for name in names:
                     ret[wiki_name] += eigennames[name]
-        #fourth phase
+
         for name in sorted(eigennames.keys(), key=len, reverse=True):
             print name
             text = text.replace(name, '')
         from pprint import pprint
         return (text, ret)
+
+    def _google_lookup(self, name):
+        try:
+            w = GoogleSearch(name)
+            w._lang = "pl"
+            return w.get_results()
+        except:
+            print "Can't access google for lookup: " + name
+            return []
 
     def _wiki_lookup(self,  results):
         from urllib import url2pathname

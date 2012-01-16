@@ -93,13 +93,14 @@ class DBProxy(object):
         return len(self.get_all_news())
 
     def delete_duplicated_news(self):
-    news = self.get_all_news()
-    counter = 0
-    for n in news:
-        if not n.body:
-            self.delete(n)
-            counter += 1
-    return counter
+        news = self.get_all_news()
+        counter = 0
+        for n in news:
+            if not n.body:
+                self.delete(n)
+                counter += 1
+        return counter
+
 if __name__ == "__main__":
     db = DBProxy()
     counter = db.delete_duplicated_news()
